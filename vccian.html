@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VCCian | VCC Lab</title>
+  <meta name="description" content="Internal resources and community space for VCC Lab" />
+  <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand brand-logo-only" href="./index.html" aria-label="VCC Lab home">
+        <img class="brand-logo" src="./assets/img/vcc-logo.png" alt="VCC Lab logo">
+        </a>
+
+        <nav class="nav-desktop" aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="./research.html">Research</a></li>
+            <li class="has-dropdown">
+              <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                People <span class="chev" aria-hidden="true">▾</span>
+              </button>
+              <ul class="dropdown" role="menu">
+                <li role="none"><a role="menuitem" href="./people/pi.html">P.I.</a></li>
+                <li role="none"><a role="menuitem" href="./people/members.html">Members</a></li>
+                <li role="none"><a role="menuitem" href="./people/alumni.html">Alumni</a></li>
+              </ul>
+            </li>
+            <li><a href="./photos.html">Photos</a></li>
+            <li><a href="./vccian.html" aria-current="page">VCCian</a></li>
+          </ul>
+        </nav>
+
+            <div class="pill pill-yonsei" title="Affiliation">
+                <img class="pill-logo" src="./assets/img/yonsei-logo.png" alt="Yonsei University">
+                <span class="pill-text">Yonsei University</span>
+            </div>
+      </div>
+
+      <div class="mobile" id="mobileMenu">
+        <ul class="mobile-list">
+          <li><a href="./research.html">Research</a></li>
+          <li class="mobile-group">
+            <button class="mobile-accordion" type="button" aria-expanded="false" aria-controls="mobilePeople">
+              People <span class="chev" aria-hidden="true">▾</span>
+            </button>
+            <ul class="mobile-sub" id="mobilePeople">
+              <li><a href="./people/pi.html">P.I.</a></li>
+              <li><a href="./people/members.html">Members</a></li>
+              <li><a href="./people/alumni.html">Alumni</a></li>
+            </ul>
+          </li>
+          <li><a href="./photos.html">Photos</a></li>
+          <li><a href="./vccian.html" aria-current="page">VCCian</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero" aria-label="Page header">
+      <div class="container">
+        <div class="page-hero-inner">
+          <h1>VCCian</h1>
+          <p class="lead">Internal notices and resources. Keep sensitive content private if needed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="VCCian content">
+      <div class="container">
+        <div class="grid2">
+          <div class="card content-card">
+            <h2>Notices</h2>
+            <ul class="list">
+              <li class="news-item">
+                <div class="date">2026-03-01</div>
+                <div class="title">Lab meeting schedule</div>
+                <div class="desc">Add time, room, and agenda link.</div>
+              </li>
+              <li class="news-item">
+                <div class="date">2026-02-20</div>
+                <div class="title">Resource update</div>
+                <div class="desc">Add links to protocols, templates, and onboarding docs.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card content-card">
+            <h2>Resources</h2>
+            <ul class="bullets">
+              <li><a class="text-link" href="#">Onboarding checklist</a></li>
+              <li><a class="text-link" href="#">Experiment templates</a></li>
+              <li><a class="text-link" href="#">Data management guide</a></li>
+              <li><a class="text-link" href="#">Poster and paper templates</a></li>
+            </ul>
+
+            <div class="mini" style="margin-top:12px">
+              <h3>Privacy note</h3>
+              <p>
+                If you need true access control, consider keeping this section in a separate private repo
+                and not linking it publicly.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card content-card" style="margin-top:18px">
+          <h2>Community</h2>
+          <p>
+            If you want a discussion board, GitHub Discussions or a Google Group can be linked here.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="copyright">© <span id="year"></span> VCC Lab.</div>
+    </div>
+  </footer>
+
+  <script defer src="./assets/js/main.js"></script>
+</body>
+</html>
