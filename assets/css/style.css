@@ -568,12 +568,18 @@ footer{
 @media (max-width: 920px){
   .photo-grid{ grid-template-columns: 1fr; }
 }
-.photo-tile{
+.photo-tile {
   margin: 0;
   border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
   background: var(--surface);
+}
+.photo-tile img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
 }
 .photo-ph{
   aspect-ratio: 4 / 3;

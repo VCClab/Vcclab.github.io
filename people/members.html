@@ -115,6 +115,39 @@
     }
     .pause-btn:hover { background: #eef3ff; color: var(--text); }
 
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px; right: 24px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      opacity: 0.8;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .lightbox-close:hover { opacity: 1; }
+    .slideshow-wrap img { cursor: zoom-in; }
+
     /* ── Member sections ── */
     .member-section { margin-bottom: 32px; }
     .member-section-title {
@@ -187,6 +220,9 @@
       color: var(--muted);
       line-height: 1.55;
     }
+    .slide:not(.active) {
+      pointer-events: none;
+    }
   </style>
 </link></head>
 <body>
@@ -211,7 +247,7 @@
 </ul>
 </li>
 <li><a href="../photos.html">Photos</a></li>
-<li><a href="../vccian.html">VCCian</a></li>
+<li><a href="../openJC.html">Open Journal Club</a></li>
 </ul>
 </nav>
 <div class="nav-right">
@@ -236,7 +272,7 @@
 </ul>
 </li>
 <li><a href="../photos.html">Photos</a></li>
-<li><a href="../vccian.html">VCCian</a></li>
+<li><a href="../openJC.html">openJC</a></li>
 </ul>
 </div>
 </div>
@@ -246,7 +282,7 @@
 <div class="container">
 <div class="page-hero-inner">
 <h1>Members</h1>
-<p class="lead">Meet the people of VCC Lab.</p>
+<p class="lead">We are Vccians! Meet the people of VCC Lab.</p>
 </div>
 </div>
 </section>
@@ -254,24 +290,7 @@
 <section aria-label="Lab photos slideshow">
 <div class="container">
 <div class="slideshow-wrap" id="slideshow">
-<!-- Add slides here. Each slide: photo or placeholder -->
-<!-- To add a real photo: replace <div class="slide-ph">...</div> with <img src="../assets/img/YOUR_PHOTO.jpg" alt="description"> -->
-<div class="slide active" data-caption="VCC Lab 2025">
-<div class="slide-ph">Add lab photo here</div>
-<div class="slide-caption">VCC Lab 2025</div>
-</div>
-<div class="slide" data-caption="Lab workshop">
-<div class="slide-ph">Add lab photo here</div>
-<div class="slide-caption">Lab workshop</div>
-</div>
-<div class="slide" data-caption="Conference">
-<div class="slide-ph">Add lab photo here</div>
-<div class="slide-caption">Conference</div>
-</div>
-<div class="slide" data-caption="Lab dinner">
-<div class="slide-ph">Add lab photo here</div>
-<div class="slide-caption">Lab dinner</div>
-</div>
+  <!-- Slides injected by JS from vccians.json -->
 </div>
 <!-- Controls -->
 <div class="slideshow-controls">
@@ -282,6 +301,12 @@
 </div>
 </div>
 </section>
+
+<!-- ── Lightbox ── -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img alt="" id="lightboxImg" src=""/>
+</div>
 <!-- ── Member list ── -->
 <section aria-label="Lab members">
 <div class="container">
@@ -423,63 +448,80 @@
 </footer>
 <script defer="" src="../assets/js/main.js"></script>
 <script>
-  (() => {
-    const slides    = Array.from(document.querySelectorAll('.slide'));
-    const dotsWrap  = document.getElementById('slideDots');
-    const prevBtn   = document.getElementById('prevBtn');
-    const nextBtn   = document.getElementById('nextBtn');
-    const pauseBtn  = document.getElementById('pauseBtn');
+  // ── Slideshow + Lightbox ──
+  const lb      = document.getElementById('lightbox');
+  const lbImg   = document.getElementById('lightboxImg');
+  const lbClose = document.getElementById('lightboxClose');
 
-    let current  = 0;
-    let paused   = false;
-    let timer    = null;
-    const INTERVAL = 3500;
+  function openLightbox(src) { lbImg.src = src; lb.classList.add('open'); }
+  function closeLightbox()   { lb.classList.remove('open'); }
 
-    // Build dots
-    slides.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'dot-btn' + (i === 0 ? ' active' : '');
-      d.setAttribute('aria-label', `Go to slide ${i + 1}`);
-      d.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(d);
-    });
+  lbClose.addEventListener('click', closeLightbox);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-    function getDots() { return Array.from(dotsWrap.querySelectorAll('.dot-btn')); }
+  fetch('../assets/img/vccians/vccians.json')
+    .then(res => res.json())
+    .then(years => {
+      const wrap     = document.getElementById('slideshow');
+      const dotsWrap = document.getElementById('slideDots');
+      const prevBtn  = document.getElementById('prevBtn');
+      const nextBtn  = document.getElementById('nextBtn');
+      const pauseBtn = document.getElementById('pauseBtn');
 
-    function goTo(idx) {
-      slides[current].classList.remove('active');
-      getDots()[current].classList.remove('active');
-      current = (idx + slides.length) % slides.length;
-      slides[current].classList.add('active');
-      getDots()[current].classList.add('active');
-    }
+      // Build slides, newest first
+      const sorted = [...years].sort((a, b) => b - a);
+      sorted.forEach((year, i) => {
+        const div = document.createElement('div');
+        div.className = 'slide' + (i === 0 ? ' active' : '');
+        div.innerHTML = `
+          <img src="../assets/img/vccians/${year}.png" alt="VCCians ${year}">
+          <div class="slide-caption">VCCians ${year}</div>`;
+        // Lightbox on image click
+        div.querySelector('img').addEventListener('click', e => {
+          e.stopPropagation();
+          openLightbox(e.target.src);
+        });
+        wrap.appendChild(div);
+      });
 
-    function next() { goTo(current + 1); }
-    function prev() { goTo(current - 1); }
+      const slides = Array.from(wrap.querySelectorAll('.slide'));
+      let current = 0, paused = false, timer = null;
+      const INTERVAL = 3500;
 
-    function startTimer() {
-      clearInterval(timer);
-      timer = setInterval(next, INTERVAL);
-    }
+      sorted.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'dot-btn' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        d.addEventListener('click', () => { goTo(i); if (!paused) startTimer(); });
+        dotsWrap.appendChild(d);
+      });
 
-    function stopTimer() { clearInterval(timer); }
-
-    prevBtn.addEventListener('click', () => { prev(); if (!paused) startTimer(); });
-    nextBtn.addEventListener('click', () => { next(); if (!paused) startTimer(); });
-
-    pauseBtn.addEventListener('click', () => {
-      paused = !paused;
-      if (paused) {
-        stopTimer();
-        pauseBtn.textContent = '▶ Resume';
-      } else {
-        startTimer();
-        pauseBtn.textContent = '⏸ Pause';
+      function getDots() { return Array.from(dotsWrap.querySelectorAll('.dot-btn')); }
+      function goTo(idx) {
+        slides[current].classList.remove('active');
+        getDots()[current].classList.remove('active');
+        current = (idx + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        getDots()[current].classList.add('active');
       }
-    });
+      function startTimer() { clearInterval(timer); timer = setInterval(() => goTo(current + 1), INTERVAL); }
+      function stopTimer()  { clearInterval(timer); }
 
-    startTimer();
-  })();
-  </script>
+      prevBtn.addEventListener('click', () => { goTo(current - 1); if (!paused) startTimer(); });
+      nextBtn.addEventListener('click', () => { goTo(current + 1); if (!paused) startTimer(); });
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        if (paused) { stopTimer(); pauseBtn.textContent = '▶ Resume'; }
+        else        { startTimer(); pauseBtn.textContent = '⏸ Pause'; }
+      });
+
+      startTimer();
+    })
+    .catch(() => {
+      document.getElementById('slideshow').innerHTML =
+        '<div class="slide-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">Could not load photos.</div>';
+    });
+</script>
 </body>
 </html>

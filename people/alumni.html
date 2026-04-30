@@ -4,10 +4,71 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Alumni | VCC Lab</title>
-  <meta name="description" content="Alumni of VCC Lab" />
+  <meta name="description" content="Alumni of VCC Lab, Yonsei University" />
   <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
   <link rel="stylesheet" href="../assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    .alumni-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .alumni-grid { grid-template-columns: 1fr; }
+    }
+
+    .alumni-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 14px 16px;
+      display: grid;
+      gap: 4px;
+    }
+    .alumni-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+    }
+    .alumni-degree {
+      font-size: 13px;
+      color: var(--muted2);
+    }
+    .alumni-current {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .alumni-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .alumni-link {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--blue);
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .alumni-link:hover {
+      background: #eef3ff;
+      border-color: var(--blue);
+      text-decoration: none;
+    }
+
+    .loading {
+      color: var(--muted2);
+      font-size: 14px;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -16,33 +77,34 @@
     <div class="container">
       <div class="nav">
         <a class="brand brand-logo-only" href="../index.html" aria-label="VCC Lab home">
-        <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
+          <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
         </a>
 
         <nav class="nav-desktop" aria-label="Primary">
           <ul class="nav-list">
             <li><a href="../research.html">Research</a></li>
-
             <li class="has-dropdown">
               <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
                 People <span class="chev" aria-hidden="true">▾</span>
               </button>
               <ul class="dropdown" role="menu">
-                <li role="none"><a role="menuitem" href="../people/pi.html">P.I.</a></li>
-                <li role="none"><a role="menuitem" href="../people/members.html">Members</a></li>
-                <li role="none"><a role="menuitem" href="../people/alumni.html" aria-current="page">Alumni</a></li>
+                <li role="none"><a role="menuitem" href="./pi.html">P.I.</a></li>
+                <li role="none"><a role="menuitem" href="./members.html">Members</a></li>
+                <li role="none"><a role="menuitem" href="./alumni.html" aria-current="page">Alumni</a></li>
               </ul>
             </li>
-
             <li><a href="../photos.html">Photos</a></li>
-            <li><a href="../vccian.html">VCCian</a></li>
+            <li><a href="../openJC.html">Open Journal Club</a></li>
           </ul>
         </nav>
 
-            <div class="pill pill-yonsei" title="Affiliation">
-                <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
-                <span class="pill-text">Yonsei University</span>
-            </div>
+        <div class="nav-right">
+          <div class="pill pill-yonsei" title="Affiliation">
+            <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
+            <span class="pill-text">Yonsei University</span>
+          </div>
+          <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+        </div>
       </div>
 
       <div class="mobile" id="mobileMenu">
@@ -53,43 +115,34 @@
               People <span class="chev" aria-hidden="true">▾</span>
             </button>
             <ul class="mobile-sub" id="mobilePeople">
-              <li><a href="../people/pi.html">P.I.</a></li>
-              <li><a href="../people/members.html">Members</a></li>
-              <li><a href="../people/alumni.html" aria-current="page">Alumni</a></li>
+              <li><a href="./pi.html">P.I.</a></li>
+              <li><a href="./members.html">Members</a></li>
+              <li><a href="./alumni.html" aria-current="page">Alumni</a></li>
             </ul>
           </li>
           <li><a href="../photos.html">Photos</a></li>
-          <li><a href="../vccian.html">VCCian</a></li>
+          <li><a href="../openJC.html">Open Journal Club</a></li>
         </ul>
       </div>
     </div>
   </header>
 
   <main id="main">
-    <section class="page-hero">
+    <section class="page-hero" aria-label="Page header">
       <div class="container">
         <div class="page-hero-inner">
           <h1>Alumni</h1>
-          <p class="lead">Former members and their current positions.</p>
+          <p class="lead">Past members of VCC Lab.</p>
         </div>
       </div>
     </section>
 
-    <section>
+    <section aria-label="Alumni list">
       <div class="container">
         <div class="card content-card">
-          <ul class="alumni-list">
-            <li class="alumni-item">
-              <div class="alumni-name">Name</div>
-              <div class="alumni-meta">Degree/Role, Year</div>
-              <div class="alumni-now">Now at Organization</div>
-            </li>
-            <li class="alumni-item">
-              <div class="alumni-name">Name</div>
-              <div class="alumni-meta">Degree/Role, Year</div>
-              <div class="alumni-now">Now at Organization</div>
-            </li>
-          </ul>
+          <div class="alumni-grid" id="alumni-grid">
+            <div class="loading">Loading…</div>
+          </div>
         </div>
       </div>
     </section>
@@ -97,10 +150,53 @@
 
   <footer>
     <div class="container">
-      <div class="copyright">© <span id="year"></span> VCC Lab.</div>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">VCC Lab</div>
+          <div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
+        </div>
+        <div>
+          <div class="footer-title">Links</div>
+          <div class="footer-links" aria-label="External links">
+            <a href="https://www.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei University</a>
+            <a href="https://psychology.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Psychology</a>
+            <a href="https://graduate.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Graduate</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
     </div>
   </footer>
 
   <script defer src="../assets/js/main.js"></script>
+  <script>
+    fetch('./alumni.json')
+      .then(res => res.json())
+      .then(data => {
+        const grid = document.getElementById('alumni-grid');
+        grid.innerHTML = data.map(p => {
+          const current = p.current
+            ? `<div class="alumni-current">→ ${p.current}</div>` : '';
+
+          const links = [];
+          if (p.scholar)  links.push(`<a class="alumni-link" href="${p.scholar}" target="_blank" rel="noreferrer">Google Scholar</a>`);
+          if (p.homepage) links.push(`<a class="alumni-link" href="${p.homepage}" target="_blank" rel="noreferrer">Website</a>`);
+          const linksHtml = links.length
+            ? `<div class="alumni-links">${links.join('')}</div>` : '';
+
+          return `
+            <div class="alumni-card">
+              <div class="alumni-name">${p.name}</div>
+              <div class="alumni-degree">${p.degree}</div>
+              ${current}
+              ${linksHtml}
+            </div>`;
+        }).join('');
+      })
+      .catch(() => {
+        document.getElementById('alumni-grid').innerHTML =
+          '<div class="loading">Failed to load alumni data.</div>';
+      });
+  </script>
 </body>
 </html>

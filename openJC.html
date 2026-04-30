@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Journal Club | VCC Lab</title>
+  <meta name="description" content="Internal resources and community space for VCC Lab" />
+  <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Schedule table ── */
+    .jc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .jc-table thead tr {
+      border-bottom: 2px solid var(--line);
+    }
+    .jc-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .jc-table tbody tr {
+      border-bottom: 1px solid var(--line);
+      transition: background 0.12s;
+    }
+    .jc-table tbody tr:last-child { border-bottom: none; }
+    .jc-table tbody tr:hover { background: var(--surface); }
+    .jc-table td {
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+    .jc-date {
+      white-space: nowrap;
+      color: var(--muted2);
+      font-size: 13px;
+      width: 160px;  /* 110px → 160px */
+    }
+    .jc-presenter {
+      white-space: nowrap;
+      font-weight: 600;
+      width: 140px;
+    }
+    .jc-paper {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .jc-mode {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .jc-mode.in-person {
+      background: rgba(22,163,74,0.12);
+      color: #15803d;
+    }
+    .jc-mode.online {
+      background: rgba(37,99,235,0.12);
+      color: #1d4ed8;
+    }
+
+    /* ── Comment toggle ── */
+    .jc-table tbody tr.jc-main-row {
+      cursor: pointer;
+    }
+    .jc-table tbody tr.jc-main-row:hover td {
+      background: var(--surface);
+    }
+    .jc-comment-row { display: none; }
+    .jc-comment-row.open { display: table-row; }
+    .jc-comment-cell {
+      padding: 0 !important;
+      border-bottom: 2px solid var(--line) !important;
+    }
+    .jc-comment-inner {
+      padding: 16px 20px 20px;
+      background: #f8faff;
+    }
+    .jc-comment-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 8px;
+      font-size: 12px;
+      color: var(--muted2);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+    .jc-comment-count .bubble { font-size: 11px; }
+    .jc-chevron {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-left: 6px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .jc-main-row.expanded .jc-chevron { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand brand-logo-only" href="./index.html" aria-label="VCC Lab home">
+        <img class="brand-logo" src="./assets/img/vcc-logo.png" alt="VCC Lab logo">
+        </a>
+
+        <nav class="nav-desktop" aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="./research.html">Research</a></li>
+            <li class="has-dropdown">
+              <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                People <span class="chev" aria-hidden="true">▾</span>
+              </button>
+              <ul class="dropdown" role="menu">
+                <li role="none"><a role="menuitem" href="./people/pi.html">P.I.</a></li>
+                <li role="none"><a role="menuitem" href="./people/members.html">Members</a></li>
+                <li role="none"><a role="menuitem" href="./people/alumni.html">Alumni</a></li>
+              </ul>
+            </li>
+            <li><a href="./photos.html">Photos</a></li>
+            <li><a href="./openJC.html" aria-current="page">Open Journal Club</a></li>
+          </ul>
+        </nav>
+
+            <div class="pill pill-yonsei" title="Affiliation">
+                <img class="pill-logo" src="./assets/img/yonsei-logo.png" alt="Yonsei University">
+                <span class="pill-text">Yonsei University</span>
+            </div>
+      </div>
+
+      <div class="mobile" id="mobileMenu">
+        <ul class="mobile-list">
+          <li><a href="./research.html">Research</a></li>
+          <li class="mobile-group">
+            <button class="mobile-accordion" type="button" aria-expanded="false" aria-controls="mobilePeople">
+              People <span class="chev" aria-hidden="true">▾</span>
+            </button>
+            <ul class="mobile-sub" id="mobilePeople">
+              <li><a href="./people/pi.html">P.I.</a></li>
+              <li><a href="./people/members.html">Members</a></li>
+              <li><a href="./people/alumni.html">Alumni</a></li>
+            </ul>
+          </li>
+          <li><a href="./photos.html">Photos</a></li>
+          <li><a href="./openJC.html" aria-current="page">Open Journal Club</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero" aria-label="Page header">
+      <div class="container">
+        <div class="page-hero-inner">
+          <h1>Open Journal Club</h1>
+          <p class="lead">Everyone is welcome to participate!</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="openJC content">
+      <div class="container">
+
+        <!-- Notice: full width -->
+        <div class="card content-card" style="margin-bottom:18px;">
+          <h2>Notices</h2>
+          <p style="color:var(--muted); font-size:15px; line-height:1.75; margin:0;">
+            The seminar is held every <strong>Monday at 1:30 PM</strong>, either in person at <strong>Room 107, Widang Hall (위당관)</strong>, Institute for Cognitive Science, or online via <strong>Zoom</strong>.
+            <br>Please read the weekly paper posted on the website in advance before attending.
+            <br><italic>The schedule may change depending on lab circumstances, so please be sure to check the schedule below.</italic>
+          </p>
+        </div>
+
+        <!-- Schedule table -->
+        <div class="card content-card">
+          <h2>Schedule</h2>
+          <div style="overflow-x:auto; margin-top:12px;">
+            <table class="jc-table" id="jc-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Presenter</th>
+                  <th>Paper</th>
+                  <th>Mode</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="jc-tbody">
+                <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section aria-label="Comments" style="display:none"></section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="copyright">© <span id="year"></span> VCC Lab.</div>
+    </div>
+  </footer>
+
+  <script defer src="./assets/js/main.js"></script>
+  <script>
+  (() => {
+    // ── Schedule data: add / edit rows here ──
+    const SCHEDULE = [
+      { date: 'Thursday, April 30, 12:00 PM', presenter: 'VCCians', paper: 'Poster Presentation Practice', mode: 'in-person' },
+      { date: 'Monday, April 20, 1:30 PM', presenter: 'Youngzoo', paper: 'Zhang, S., Zhan, B., Wang, L., & Jiang, Y. (2025). Dyadic learning shapes gaze-mediated social attentional orienting. Cognition, 265', mode: 'online' },
+      { date: 'Monday, April 13, 1:30 PM', presenter: 'VCCians', paper: 'PhD Dissertation Defense Practice – Widang Hall Room 501', mode: 'in-person' },
+      { date: 'Monday, March 30, 1:30 PM', presenter: 'Lijeong', paper: 'Masroujah, L. S., Wilcke, S., Jeffery, L., Mostert, B., Tiddeman, B., & Sutherland, C. A. (2026). Testing stimulus generalisation as a mechanism for impression formation. Cognition, 270, 106414.', mode: 'online' },
+    ];
+
+    // giscus config — update repo/repo-id/category/category-id as needed
+    const GISCUS = {
+      repo:        'VCClab/Vcclab.github.io',
+      repoId:      'R_kgDORdCI2w',
+      category:    'General',
+      categoryId:  '[CATEGORY_ID]',
+      theme:       'light',
+      lang:        'en',
+    };
+
+    const tbody = document.getElementById('jc-tbody');
+    // comment count cache: date → count (fetched lazily via giscus postMessage)
+    const countCache = {};
+
+    SCHEDULE.forEach((row, i) => {
+      const modeLabel = row.mode === 'in-person' ? 'In person' : 'Online';
+      const term = `jc-${row.date}`; // unique discussion term per session
+
+      // ── Main row ──
+      const tr = document.createElement('tr');
+      tr.className = 'jc-main-row';
+      tr.dataset.idx = i;
+      tr.dataset.term = term;
+      tr.innerHTML = `
+        <td class="jc-date">${row.date}</td>
+        <td class="jc-presenter">${row.presenter}</td>
+        <td class="jc-paper">${row.paper}</td>
+        <td>
+          <span class="jc-mode ${row.mode}">${modeLabel}</span>
+          <span class="jc-comment-count" data-term="${term}">
+            <span class="bubble">💬</span>
+            <span class="count-num" id="count-${term}">—</span>
+          </span>
+        </td>
+        <td style="white-space:nowrap; color:var(--muted2); font-size:12px;">
+          Comments <span class="jc-chevron">▾</span>
+        </td>`;
+      tbody.appendChild(tr);
+
+      // ── Comment row (hidden by default) ──
+      const cr = document.createElement('tr');
+      cr.className = 'jc-comment-row';
+      cr.id = `comment-row-${i}`;
+      cr.innerHTML = `
+        <td class="jc-comment-cell" colspan="5">
+          <div class="jc-comment-inner" id="comment-inner-${i}">
+            <!-- giscus loads here on first open -->
+          </div>
+        </td>`;
+      tbody.appendChild(cr);
+
+      // ── Toggle logic ──
+      tr.addEventListener('click', () => {
+        const isOpen = cr.classList.contains('open');
+
+        // Close all other open rows first
+        document.querySelectorAll('.jc-comment-row.open').forEach(r => r.classList.remove('open'));
+        document.querySelectorAll('.jc-main-row.expanded').forEach(r => r.classList.remove('expanded'));
+
+        if (!isOpen) {
+          cr.classList.add('open');
+          tr.classList.add('expanded');
+          loadGiscus(i, term);
+        }
+      });
+    });
+
+    // ── Load giscus iframe into a specific comment row ──
+    function loadGiscus(idx, term) {
+      const inner = document.getElementById(`comment-inner-${idx}`);
+      if (inner.querySelector('script[data-giscus-loaded]')) return; // already loaded
+
+      const script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo',             GISCUS.repo);
+      script.setAttribute('data-repo-id',          GISCUS.repoId);
+      script.setAttribute('data-category',         GISCUS.category);
+      script.setAttribute('data-category-id',      GISCUS.categoryId);
+      script.setAttribute('data-mapping',          'specific');
+      script.setAttribute('data-term',             term);
+      script.setAttribute('data-strict',           '1');
+      script.setAttribute('data-reactions-enabled','1');
+      script.setAttribute('data-emit-metadata',    '1'); // emit count
+      script.setAttribute('data-input-position',   'top');
+      script.setAttribute('data-theme',            GISCUS.theme);
+      script.setAttribute('data-lang',             GISCUS.lang);
+      script.setAttribute('crossorigin',           'anonymous');
+      script.setAttribute('data-giscus-loaded',    'true');
+      script.async = true;
+      inner.appendChild(script);
+    }
+
+    // ── Listen for giscus metadata (comment counts) ──
+    window.addEventListener('message', e => {
+      if (e.origin !== 'https://giscus.app') return;
+      const data = e.data?.giscus?.discussion;
+      if (!data) return;
+      const term = e.data?.giscus?.discussion?.url
+        ?.split('=').pop(); // fallback
+      // giscus emits totalCommentCount + totalReplyCount
+      const count = (data.totalCommentCount ?? 0) + (data.totalReplyCount ?? 0);
+      // find which term this belongs to by matching open row
+      document.querySelectorAll('.jc-main-row.expanded').forEach(tr => {
+        const t = tr.dataset.term;
+        const el = document.getElementById(`count-${t}`);
+        if (el) el.textContent = count;
+      });
+    });
+  })();
+  </script></body></html>
