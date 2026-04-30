@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Members | VCC Lab</title>
-<meta content="Members of VCC Lab, Yonsei University" name="description"/>
-<link href="../assets/favicon/favicon.ico" rel="icon" sizes="any"/>
-<link href="../assets/css/style.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
-<style>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Members | VCC Lab</title>
+  <meta name="description" content="Members of VCC Lab, Yonsei University" />
+  <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
     /* ── Slideshow ── */
     .slideshow-wrap {
       position: relative;
@@ -32,13 +30,14 @@
       justify-content: center;
     }
     .slide.active { opacity: 1; }
+    .slide:not(.active) { pointer-events: none; }
     .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      cursor: zoom-in;
     }
-    /* placeholder when no image */
     .slide-ph {
       width: 100%;
       height: 100%;
@@ -63,7 +62,7 @@
       backdrop-filter: blur(4px);
     }
 
-    /* controls */
+    /* ── Slideshow controls ── */
     .slideshow-controls {
       display: flex;
       align-items: center;
@@ -146,7 +145,6 @@
       line-height: 1;
     }
     .lightbox-close:hover { opacity: 1; }
-    .slideshow-wrap img { cursor: zoom-in; }
 
     /* ── Member sections ── */
     .member-section { margin-bottom: 32px; }
@@ -174,40 +172,38 @@
       background: var(--surface);
       padding: 16px;
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 110px 1fr;
       gap: 14px;
       align-items: start;
     }
-    .member-info {
-      display: grid;
-      gap: 6px;
-    }
     .member-avatar-ph {
-      width: 80px; height: 80px;
-      border-radius: 12px;
+      width: 110px; height: 150px;
+      border-radius: 10px;
       border: 1px solid var(--line);
+      object-fit: cover;
+      display: block;
       background:
         radial-gradient(circle at 35% 35%, var(--blue-weak), transparent 60%),
         radial-gradient(circle at 70% 65%, var(--green-weak), transparent 60%),
         var(--surface);
     }
-    .member-info { flex: 1; min-width: 0; }
+    .member-info {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
     .member-name {
       font-weight: 700;
       font-size: 15px;
       color: var(--text);
-      margin: 0 0 2px;
+      margin: 0;
     }
     .member-contact {
       font-size: 12px;
       color: var(--blue);
       word-break: break-all;
-      text-decoration: none;
     }
-    .member-field {
-      display: grid;
-      gap: 3px;
-    }
+    .member-field { display: grid; gap: 3px; }
     .member-field-label {
       font-size: 11px;
       font-weight: 700;
@@ -220,308 +216,373 @@
       color: var(--muted);
       line-height: 1.55;
     }
-    .slide:not(.active) {
-      pointer-events: none;
-    }
   </style>
-</link></head>
+</head>
+
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header>
-<div class="container">
-<div class="nav">
-<a aria-label="VCC Lab home" class="brand brand-logo-only" href="../index.html">
-<img alt="VCC Lab logo" class="brand-logo" src="../assets/img/vcc-logo.png"/>
-</a>
-<nav aria-label="Primary" class="nav-desktop">
-<ul class="nav-list">
-<li><a href="../research.html">Research</a></li>
-<li class="has-dropdown">
-<button aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" type="button">
-                People <span aria-hidden="true" class="chev">▾</span>
-</button>
-<ul class="dropdown" role="menu">
-<li role="none"><a href="./pi.html" role="menuitem">P.I.</a></li>
-<li role="none"><a aria-current="page" href="./members.html" role="menuitem">Members</a></li>
-<li role="none"><a href="./alumni.html" role="menuitem">Alumni</a></li>
-</ul>
-</li>
-<li><a href="../photos.html">Photos</a></li>
-<li><a href="../openJC.html">Open Journal Club</a></li>
-</ul>
-</nav>
-<div class="nav-right">
-<div class="pill pill-yonsei" title="Affiliation">
-<img alt="Yonsei University" class="pill-logo" src="../assets/img/yonsei-logo.png"/>
-<span class="pill-text">Yonsei University</span>
-</div>
-<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu" class="menu-btn" id="menuBtn">☰</button>
-</div>
-</div>
-<div class="mobile" id="mobileMenu">
-<ul class="mobile-list">
-<li><a href="../research.html">Research</a></li>
-<li class="mobile-group">
-<button aria-controls="mobilePeople" aria-expanded="false" class="mobile-accordion" type="button">
-              People <span aria-hidden="true" class="chev">▾</span>
-</button>
-<ul class="mobile-sub" id="mobilePeople">
-<li><a href="./pi.html">P.I.</a></li>
-<li><a aria-current="page" href="./members.html">Members</a></li>
-<li><a href="./alumni.html">Alumni</a></li>
-</ul>
-</li>
-<li><a href="../photos.html">Photos</a></li>
-<li><a href="../openJC.html">openJC</a></li>
-</ul>
-</div>
-</div>
-</header>
-<main id="main">
-<section aria-label="Page header" class="page-hero">
-<div class="container">
-<div class="page-hero-inner">
-<h1>Members</h1>
-<p class="lead">We are Vccians! Meet the people of VCC Lab.</p>
-</div>
-</div>
-</section>
-<!-- ── Photo slideshow ── -->
-<section aria-label="Lab photos slideshow">
-<div class="container">
-<div class="slideshow-wrap" id="slideshow">
-  <!-- Slides injected by JS from vccians.json -->
-</div>
-<!-- Controls -->
-<div class="slideshow-controls">
-<button aria-label="Previous slide" class="slide-btn" id="prevBtn">‹</button>
-<div class="slide-dots" id="slideDots"></div>
-<button aria-label="Next slide" class="slide-btn" id="nextBtn">›</button>
-<button class="pause-btn" id="pauseBtn">⏸ Pause</button>
-</div>
-</div>
-</section>
+  <a class="skip" href="#main">Skip to content</a>
 
-<!-- ── Lightbox ── -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightboxClose">✕</button>
-  <img alt="" id="lightboxImg" src=""/>
-</div>
-<!-- ── Member list ── -->
-<section aria-label="Lab members">
-<div class="container">
-<!-- Postdoctoral Fellows -->
-<div class="member-section">
-<div class="member-section-title">Postdoctoral Fellows</div>
-<div class="member-grid">
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Cheongil Kim</div>
-<span class="member-contact">kimcheongil@ynaver.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Consciousness</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Movie, Walking</div>
-</div></div></div>
-</div>
-</div>
-<!-- PhD Students -->
-<div class="member-section">
-<div class="member-section-title">PhD Students</div>
-<div class="member-grid">
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Si On Kim</div>
-<span class="member-contact">htmwys@gmail.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Eye movement, Pupil dilation, Detection of deception</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Music</div>
-</div></div></div>
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Jeunghwan Choi</div>
-<span class="member-contact">abcdef0518@naver.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Contextual cueing, Ensemble perception</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Road Cycling, Workout</div>
-</div></div></div>
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Youngzoo Jang</div>
-<span class="member-contact">yzjang@naver.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Consciousness, Ensemble representation</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Musical/theater acting and planning, Traveling</div>
-</div></div></div>
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Aaron Van Boven</div>
-<span class="member-contact">aaron.vanboven1991@gmail.com</span>
-<div class="member-field">
-<div class="member-field-label"></div>
-<div class="member-field-value"></div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Music, Food, and Series</div>
-</div></div></div>
-</div>
-</div>
-<!-- MA Students -->
-<div class="member-section">
-<div class="member-section-title">MA Students</div>
-<div class="member-grid">
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Junghyun Park</div>
-<span class="member-contact">outtrueblack@yonsei.ac.kr</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Ensemble perception</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Playing games, Music</div>
-</div></div></div>
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Daun Jung</div>
-<span class="member-contact">daunjung@yonsei.ac.kr</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Visual perception, Statistical learning</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Jazz, Escape room, Board game</div>
-</div></div></div>
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Seri Kwon</div>
-<span class="member-contact">ksl838363@gmail.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Visual perception, Attentional breadth</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Cooking, Taking photos</div>
-</div></div></div>
-</div>
-</div>
-<!-- Lab Manager -->
-<div class="member-section">
-<div class="member-section-title">Lab Manager</div>
-<div class="member-grid">
-<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
-<div class="member-name">Jeong Hyeon Park</div>
-<span class="member-contact">junghyuniverse@gmail.com</span>
-<div class="member-field">
-<div class="member-field-label">Research</div>
-<div class="member-field-value">Visual perception</div>
-</div><div class="member-field">
-<div class="member-field-label">Interests</div>
-<div class="member-field-value">Reading</div>
-</div></div></div>
-</div>
-</div>
-</div>
-</section>
-</main>
-<footer>
-<div class="container">
-<div class="footer-grid">
-<div>
-<div class="footer-title">VCC Lab</div>
-<div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
-</div>
-<div>
-<div class="footer-title">Links</div>
-<div aria-label="External links" class="footer-links">
-<a href="https://www.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei University</a>
-<a href="https://psychology.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei Psychology</a>
-<a href="https://graduate.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei Graduate</a>
-</div>
-</div>
-</div>
-<div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
-</div>
-</footer>
-<script defer="" src="../assets/js/main.js"></script>
-<script>
-  // ── Slideshow + Lightbox ──
-  const lb      = document.getElementById('lightbox');
-  const lbImg   = document.getElementById('lightboxImg');
-  const lbClose = document.getElementById('lightboxClose');
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand brand-logo-only" href="../index.html" aria-label="VCC Lab home">
+          <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
+        </a>
 
-  function openLightbox(src) { lbImg.src = src; lb.classList.add('open'); }
-  function closeLightbox()   { lb.classList.remove('open'); }
+        <nav class="nav-desktop" aria-label="Primary">
+          <ul class="nav-list">
+            <li><a href="../research.html">Research</a></li>
+            <li class="has-dropdown">
+              <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                People <span class="chev" aria-hidden="true">▾</span>
+              </button>
+              <ul class="dropdown" role="menu">
+                <li role="none"><a role="menuitem" href="./pi.html">P.I.</a></li>
+                <li role="none"><a role="menuitem" href="./members.html" aria-current="page">Members</a></li>
+                <li role="none"><a role="menuitem" href="./alumni.html">Alumni</a></li>
+              </ul>
+            </li>
+            <li><a href="../photos.html">Photos</a></li>
+            <li><a href="../openJC.html">Open Journal Club</a></li>
+          </ul>
+        </nav>
 
-  lbClose.addEventListener('click', closeLightbox);
-  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+        <div class="nav-right">
+          <div class="pill pill-yonsei" title="Affiliation">
+            <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
+            <span class="pill-text">Yonsei University</span>
+          </div>
+          <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+        </div>
+      </div>
 
-  fetch('../assets/img/vccians/vccians.json')
-    .then(res => res.json())
-    .then(years => {
-      const wrap     = document.getElementById('slideshow');
-      const dotsWrap = document.getElementById('slideDots');
-      const prevBtn  = document.getElementById('prevBtn');
-      const nextBtn  = document.getElementById('nextBtn');
-      const pauseBtn = document.getElementById('pauseBtn');
+      <div class="mobile" id="mobileMenu">
+        <ul class="mobile-list">
+          <li><a href="../research.html">Research</a></li>
+          <li class="mobile-group">
+            <button class="mobile-accordion" type="button" aria-expanded="false" aria-controls="mobilePeople">
+              People <span class="chev" aria-hidden="true">▾</span>
+            </button>
+            <ul class="mobile-sub" id="mobilePeople">
+              <li><a href="./pi.html">P.I.</a></li>
+              <li><a href="./members.html" aria-current="page">Members</a></li>
+              <li><a href="./alumni.html">Alumni</a></li>
+            </ul>
+          </li>
+          <li><a href="../photos.html">Photos</a></li>
+          <li><a href="../openJC.html">Open Journal Club</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
 
-      // Build slides, newest first
-      const sorted = [...years].sort((a, b) => b - a);
-      sorted.forEach((year, i) => {
-        const div = document.createElement('div');
-        div.className = 'slide' + (i === 0 ? ' active' : '');
-        div.innerHTML = `
-          <img src="../assets/img/vccians/${year}.png" alt="VCCians ${year}">
-          <div class="slide-caption">VCCians ${year}</div>`;
-        // Lightbox on image click
-        div.querySelector('img').addEventListener('click', e => {
-          e.stopPropagation();
-          openLightbox(e.target.src);
+  <main id="main">
+
+    <section class="page-hero" aria-label="Page header">
+      <div class="container">
+        <div class="page-hero-inner">
+          <h1>Members</h1>
+          <p class="lead">We are VCCians! Meet the people of VCC Lab.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Photo slideshow ── -->
+    <section aria-label="Lab photos slideshow">
+      <div class="container">
+        <div class="slideshow-wrap" id="slideshow">
+          <!-- Slides injected by JS from vccians.json -->
+        </div>
+        <div class="slideshow-controls">
+          <button class="slide-btn" id="prevBtn" aria-label="Previous slide">‹</button>
+          <div class="slide-dots" id="slideDots"></div>
+          <button class="slide-btn" id="nextBtn" aria-label="Next slide">›</button>
+          <button class="pause-btn" id="pauseBtn">⏸ Pause</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Lightbox ── -->
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightboxClose">✕</button>
+      <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <!-- ── Member list ── -->
+    <section aria-label="Lab members">
+      <div class="container">
+
+        <!-- Postdoctoral Fellows -->
+        <div class="member-section">
+          <div class="member-section-title">Postdoctoral Fellows</div>
+          <div class="member-grid">
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/cheongil-kim.jpg" alt="Cheongil Kim">
+              <div class="member-info">
+                <div class="member-name">Cheongil Kim</div>
+                <span class="member-contact">kimcheongil@ynaver.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Consciousness</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Movie, Walking</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PhD Students -->
+        <div class="member-section">
+          <div class="member-section-title">PhD Students</div>
+          <div class="member-grid">
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/si-on-kim.png" alt="Si On Kim">
+              <div class="member-info">
+                <div class="member-name">Si On Kim</div>
+                <span class="member-contact">htmwys@gmail.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Eye movement, Pupil dilation, Detection of deception</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Music</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/jeunghwan-choi.jpg" alt="Jeunghwan Choi">
+              <div class="member-info">
+                <div class="member-name">Jeunghwan Choi</div>
+                <span class="member-contact">abcdef0518@naver.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Contextual cueing, Ensemble perception</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Road Cycling, Workout</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/Youngzoo-Jang.jpg" alt="Youngzoo Jang">
+              <div class="member-info">
+                <div class="member-name">Youngzoo Jang</div>
+                <span class="member-contact">yzjang@naver.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Consciousness, Ensemble representation</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Musical/theater acting and planning, Traveling</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/Aaron.jpg" alt="Aaron Van Boven">
+              <div class="member-info">
+                <div class="member-name">Aaron Van Boven</div>
+                <span class="member-contact">aaron.vanboven1991@gmail.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Music, Food, and Series</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MA Students -->
+        <div class="member-section">
+          <div class="member-section-title">MA Students</div>
+          <div class="member-grid">
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/junghyun-park.jpg" alt="Junghyun Park">
+              <div class="member-info">
+                <div class="member-name">Junghyun Park</div>
+                <span class="member-contact">outtrueblack@yonsei.ac.kr</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Ensemble perception</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Playing games, Music</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/daun_jung.png" alt="Daun Jung">
+              <div class="member-info">
+                <div class="member-name">Daun Jung</div>
+                <span class="member-contact">daunjung@yonsei.ac.kr</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Visual perception, Statistical learning</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Jazz, Escape room, Board game</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/Kwon_seri.jpg" alt="Seri Kwon">
+              <div class="member-info">
+                <div class="member-name">Seri Kwon</div>
+                <span class="member-contact">ksl838363@gmail.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Visual perception, Attentional breadth</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Cooking, Taking photos</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Lab Manager -->
+        <div class="member-section">
+          <div class="member-section-title">Lab Manager</div>
+          <div class="member-grid">
+
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/jeonghyun-park.png" alt="Jeong Hyeon Park">
+              <div class="member-info">
+                <div class="member-name">Jeong Hyeon Park</div>
+                <span class="member-contact">junghyuniverse@gmail.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Visual perception</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Reading</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">VCC Lab</div>
+          <div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
+        </div>
+        <div>
+          <div class="footer-title">Links</div>
+          <div class="footer-links" aria-label="External links">
+            <a href="https://www.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei University</a>
+            <a href="https://psychology.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Psychology</a>
+            <a href="https://graduate.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Graduate</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script defer src="../assets/js/main.js"></script>
+  <script>
+    // ── Slideshow + Lightbox ──
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lightboxImg');
+    const lbClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src) { lbImg.src = src; lb.classList.add('open'); }
+    function closeLightbox()   { lb.classList.remove('open'); }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    fetch('../assets/img/vccians/vccians.json')
+      .then(res => res.json())
+      .then(years => {
+        const wrap     = document.getElementById('slideshow');
+        const dotsWrap = document.getElementById('slideDots');
+        const prevBtn  = document.getElementById('prevBtn');
+        const nextBtn  = document.getElementById('nextBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+
+        const sorted = [...years].sort((a, b) => b - a);
+        sorted.forEach((year, i) => {
+          const div = document.createElement('div');
+          div.className = 'slide' + (i === 0 ? ' active' : '');
+          div.innerHTML = `
+            <img src="../assets/img/vccians/${year}.png" alt="VCCians ${year}">
+            <div class="slide-caption">VCCians ${year}</div>`;
+          div.querySelector('img').addEventListener('click', e => {
+            e.stopPropagation();
+            openLightbox(e.target.src);
+          });
+          wrap.appendChild(div);
         });
-        wrap.appendChild(div);
+
+        const slides = Array.from(wrap.querySelectorAll('.slide'));
+        let current = 0, paused = false, timer = null;
+        const INTERVAL = 3500;
+
+        sorted.forEach((_, i) => {
+          const d = document.createElement('button');
+          d.className = 'dot-btn' + (i === 0 ? ' active' : '');
+          d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          d.addEventListener('click', () => { goTo(i); if (!paused) startTimer(); });
+          dotsWrap.appendChild(d);
+        });
+
+        function getDots() { return Array.from(dotsWrap.querySelectorAll('.dot-btn')); }
+        function goTo(idx) {
+          slides[current].classList.remove('active');
+          getDots()[current].classList.remove('active');
+          current = (idx + slides.length) % slides.length;
+          slides[current].classList.add('active');
+          getDots()[current].classList.add('active');
+        }
+        function startTimer() { clearInterval(timer); timer = setInterval(() => goTo(current + 1), INTERVAL); }
+        function stopTimer()  { clearInterval(timer); }
+
+        prevBtn.addEventListener('click', () => { goTo(current - 1); if (!paused) startTimer(); });
+        nextBtn.addEventListener('click', () => { goTo(current + 1); if (!paused) startTimer(); });
+        pauseBtn.addEventListener('click', () => {
+          paused = !paused;
+          if (paused) { stopTimer(); pauseBtn.textContent = '▶ Resume'; }
+          else        { startTimer(); pauseBtn.textContent = '⏸ Pause'; }
+        });
+
+        startTimer();
+      })
+      .catch(() => {
+        document.getElementById('slideshow').innerHTML =
+          '<div class="slide-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">Could not load photos.</div>';
       });
-
-      const slides = Array.from(wrap.querySelectorAll('.slide'));
-      let current = 0, paused = false, timer = null;
-      const INTERVAL = 3500;
-
-      sorted.forEach((_, i) => {
-        const d = document.createElement('button');
-        d.className = 'dot-btn' + (i === 0 ? ' active' : '');
-        d.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        d.addEventListener('click', () => { goTo(i); if (!paused) startTimer(); });
-        dotsWrap.appendChild(d);
-      });
-
-      function getDots() { return Array.from(dotsWrap.querySelectorAll('.dot-btn')); }
-      function goTo(idx) {
-        slides[current].classList.remove('active');
-        getDots()[current].classList.remove('active');
-        current = (idx + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        getDots()[current].classList.add('active');
-      }
-      function startTimer() { clearInterval(timer); timer = setInterval(() => goTo(current + 1), INTERVAL); }
-      function stopTimer()  { clearInterval(timer); }
-
-      prevBtn.addEventListener('click', () => { goTo(current - 1); if (!paused) startTimer(); });
-      nextBtn.addEventListener('click', () => { goTo(current + 1); if (!paused) startTimer(); });
-      pauseBtn.addEventListener('click', () => {
-        paused = !paused;
-        if (paused) { stopTimer(); pauseBtn.textContent = '▶ Resume'; }
-        else        { startTimer(); pauseBtn.textContent = '⏸ Pause'; }
-      });
-
-      startTimer();
-    })
-    .catch(() => {
-      document.getElementById('slideshow').innerHTML =
-        '<div class="slide-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">Could not load photos.</div>';
-    });
-</script>
+  </script>
 </body>
 </html>
