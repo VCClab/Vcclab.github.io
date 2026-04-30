@@ -1,113 +1,485 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Members | VCC Lab</title>
-  <meta name="description" content="Members of VCC Lab" />
-  <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
-  <link rel="stylesheet" href="../assets/css/style.css" />
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Members | VCC Lab</title>
+<meta content="Members of VCC Lab, Yonsei University" name="description"/>
+<link href="../assets/favicon/favicon.ico" rel="icon" sizes="any"/>
+<link href="../assets/css/style.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+
+    /* ── Slideshow ── */
+    .slideshow-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 6;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide.active { opacity: 1; }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* placeholder when no image */
+    .slide-ph {
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(37,99,235,0.13), transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(22,163,74,0.12), transparent 60%),
+        radial-gradient(ellipse at 50% 80%, rgba(245,158,11,0.12), transparent 60%),
+        var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted2);
+      font-size: 14px;
+    }
+    .slide-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 16px;
+      background: rgba(15,23,42,0.45);
+      color: #fff;
+      font-size: 13px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* controls */
+    .slideshow-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .slide-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .slide-btn:hover { background: #eef3ff; color: var(--text); }
+    .slide-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .dot-btn {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: var(--line);
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .dot-btn.active {
+      background: var(--blue);
+      transform: scale(1.3);
+    }
+    .pause-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pause-btn:hover { background: #eef3ff; color: var(--text); }
+
+    /* ── Member sections ── */
+    .member-section { margin-bottom: 32px; }
+    .member-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .member-grid { grid-template-columns: 1fr; }
+    }
+    .member-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .member-info {
+      display: grid;
+      gap: 6px;
+    }
+    .member-avatar-ph {
+      width: 80px; height: 80px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 35% 35%, var(--blue-weak), transparent 60%),
+        radial-gradient(circle at 70% 65%, var(--green-weak), transparent 60%),
+        var(--surface);
+    }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      margin: 0 0 2px;
+    }
+    .member-contact {
+      font-size: 12px;
+      color: var(--blue);
+      word-break: break-all;
+      text-decoration: none;
+    }
+    .member-field {
+      display: grid;
+      gap: 3px;
+    }
+    .member-field-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+    .member-field-value {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+  </style>
+</link></head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+<div class="container">
+<div class="nav">
+<a aria-label="VCC Lab home" class="brand brand-logo-only" href="../index.html">
+<img alt="VCC Lab logo" class="brand-logo" src="../assets/img/vcc-logo.png"/>
+</a>
+<nav aria-label="Primary" class="nav-desktop">
+<ul class="nav-list">
+<li><a href="../research.html">Research</a></li>
+<li class="has-dropdown">
+<button aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" type="button">
+                People <span aria-hidden="true" class="chev">▾</span>
+</button>
+<ul class="dropdown" role="menu">
+<li role="none"><a href="./pi.html" role="menuitem">P.I.</a></li>
+<li role="none"><a aria-current="page" href="./members.html" role="menuitem">Members</a></li>
+<li role="none"><a href="./alumni.html" role="menuitem">Alumni</a></li>
+</ul>
+</li>
+<li><a href="../photos.html">Photos</a></li>
+<li><a href="../vccian.html">VCCian</a></li>
+</ul>
+</nav>
+<div class="nav-right">
+<div class="pill pill-yonsei" title="Affiliation">
+<img alt="Yonsei University" class="pill-logo" src="../assets/img/yonsei-logo.png"/>
+<span class="pill-text">Yonsei University</span>
+</div>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu" class="menu-btn" id="menuBtn">☰</button>
+</div>
+</div>
+<div class="mobile" id="mobileMenu">
+<ul class="mobile-list">
+<li><a href="../research.html">Research</a></li>
+<li class="mobile-group">
+<button aria-controls="mobilePeople" aria-expanded="false" class="mobile-accordion" type="button">
+              People <span aria-hidden="true" class="chev">▾</span>
+</button>
+<ul class="mobile-sub" id="mobilePeople">
+<li><a href="./pi.html">P.I.</a></li>
+<li><a aria-current="page" href="./members.html">Members</a></li>
+<li><a href="./alumni.html">Alumni</a></li>
+</ul>
+</li>
+<li><a href="../photos.html">Photos</a></li>
+<li><a href="../vccian.html">VCCian</a></li>
+</ul>
+</div>
+</div>
+</header>
+<main id="main">
+<section aria-label="Page header" class="page-hero">
+<div class="container">
+<div class="page-hero-inner">
+<h1>Members</h1>
+<p class="lead">Meet the people of VCC Lab.</p>
+</div>
+</div>
+</section>
+<!-- ── Photo slideshow ── -->
+<section aria-label="Lab photos slideshow">
+<div class="container">
+<div class="slideshow-wrap" id="slideshow">
+<!-- Add slides here. Each slide: photo or placeholder -->
+<!-- To add a real photo: replace <div class="slide-ph">...</div> with <img src="../assets/img/YOUR_PHOTO.jpg" alt="description"> -->
+<div class="slide active" data-caption="VCC Lab 2025">
+<div class="slide-ph">Add lab photo here</div>
+<div class="slide-caption">VCC Lab 2025</div>
+</div>
+<div class="slide" data-caption="Lab workshop">
+<div class="slide-ph">Add lab photo here</div>
+<div class="slide-caption">Lab workshop</div>
+</div>
+<div class="slide" data-caption="Conference">
+<div class="slide-ph">Add lab photo here</div>
+<div class="slide-caption">Conference</div>
+</div>
+<div class="slide" data-caption="Lab dinner">
+<div class="slide-ph">Add lab photo here</div>
+<div class="slide-caption">Lab dinner</div>
+</div>
+</div>
+<!-- Controls -->
+<div class="slideshow-controls">
+<button aria-label="Previous slide" class="slide-btn" id="prevBtn">‹</button>
+<div class="slide-dots" id="slideDots"></div>
+<button aria-label="Next slide" class="slide-btn" id="nextBtn">›</button>
+<button class="pause-btn" id="pauseBtn">⏸ Pause</button>
+</div>
+</div>
+</section>
+<!-- ── Member list ── -->
+<section aria-label="Lab members">
+<div class="container">
+<!-- Postdoctoral Fellows -->
+<div class="member-section">
+<div class="member-section-title">Postdoctoral Fellows</div>
+<div class="member-grid">
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Cheongil Kim</div>
+<span class="member-contact">kimcheongil@ynaver.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Consciousness</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Movie, Walking</div>
+</div></div></div>
+</div>
+</div>
+<!-- PhD Students -->
+<div class="member-section">
+<div class="member-section-title">PhD Students</div>
+<div class="member-grid">
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Si On Kim</div>
+<span class="member-contact">htmwys@gmail.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Eye movement, Pupil dilation, Detection of deception</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Music</div>
+</div></div></div>
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Jeunghwan Choi</div>
+<span class="member-contact">abcdef0518@naver.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Contextual cueing, Ensemble perception</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Road Cycling, Workout</div>
+</div></div></div>
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Youngzoo Jang</div>
+<span class="member-contact">yzjang@naver.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Consciousness, Ensemble representation</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Musical/theater acting and planning, Traveling</div>
+</div></div></div>
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Aaron Van Boven</div>
+<span class="member-contact">aaron.vanboven1991@gmail.com</span>
+<div class="member-field">
+<div class="member-field-label"></div>
+<div class="member-field-value"></div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Music, Food, and Series</div>
+</div></div></div>
+</div>
+</div>
+<!-- MA Students -->
+<div class="member-section">
+<div class="member-section-title">MA Students</div>
+<div class="member-grid">
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Junghyun Park</div>
+<span class="member-contact">outtrueblack@yonsei.ac.kr</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Ensemble perception</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Playing games, Music</div>
+</div></div></div>
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Daun Jung</div>
+<span class="member-contact">daunjung@yonsei.ac.kr</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Visual perception, Statistical learning</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Jazz, Escape room, Board game</div>
+</div></div></div>
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Seri Kwon</div>
+<span class="member-contact">ksl838363@gmail.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Visual perception, Attentional breadth</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Cooking, Taking photos</div>
+</div></div></div>
+</div>
+</div>
+<!-- Lab Manager -->
+<div class="member-section">
+<div class="member-section-title">Lab Manager</div>
+<div class="member-grid">
+<div class="member-card"><div class="member-avatar-ph"></div><div class="member-info">
+<div class="member-name">Jeong Hyeon Park</div>
+<span class="member-contact">junghyuniverse@gmail.com</span>
+<div class="member-field">
+<div class="member-field-label">Research</div>
+<div class="member-field-value">Visual perception</div>
+</div><div class="member-field">
+<div class="member-field-label">Interests</div>
+<div class="member-field-value">Reading</div>
+</div></div></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="footer-title">VCC Lab</div>
+<div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
+</div>
+<div>
+<div class="footer-title">Links</div>
+<div aria-label="External links" class="footer-links">
+<a href="https://www.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei University</a>
+<a href="https://psychology.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei Psychology</a>
+<a href="https://graduate.yonsei.ac.kr/" rel="noreferrer" target="_blank">Yonsei Graduate</a>
+</div>
+</div>
+</div>
+<div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
+</div>
+</footer>
+<script defer="" src="../assets/js/main.js"></script>
+<script>
+  (() => {
+    const slides    = Array.from(document.querySelectorAll('.slide'));
+    const dotsWrap  = document.getElementById('slideDots');
+    const prevBtn   = document.getElementById('prevBtn');
+    const nextBtn   = document.getElementById('nextBtn');
+    const pauseBtn  = document.getElementById('pauseBtn');
 
-  <header>
-    <div class="container">
-      <div class="nav">
-        <a class="brand brand-logo-only" href="./index.html" aria-label="VCC Lab home">
-        <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
-        </a>
+    let current  = 0;
+    let paused   = false;
+    let timer    = null;
+    const INTERVAL = 3500;
 
-        <nav class="nav-desktop" aria-label="Primary">
-          <ul class="nav-list">
-            <li><a href="../research.html">Research</a></li>
+    // Build dots
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'dot-btn' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      d.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(d);
+    });
 
-            <li class="has-dropdown">
-              <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
-                People <span class="chev" aria-hidden="true">▾</span>
-              </button>
-              <ul class="dropdown" role="menu">
-                <li role="none"><a role="menuitem" href="../people/pi.html">P.I.</a></li>
-                <li role="none"><a role="menuitem" href="../people/members.html" aria-current="page">Members</a></li>
-                <li role="none"><a role="menuitem" href="../people/alumni.html">Alumni</a></li>
-              </ul>
-            </li>
+    function getDots() { return Array.from(dotsWrap.querySelectorAll('.dot-btn')); }
 
-            <li><a href="../photos.html">Photos</a></li>
-            <li><a href="../vccian.html">VCCian</a></li>
-          </ul>
-        </nav>
+    function goTo(idx) {
+      slides[current].classList.remove('active');
+      getDots()[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      getDots()[current].classList.add('active');
+    }
 
-            <div class="pill pill-yonsei" title="Affiliation">
-                <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
-                <span class="pill-text">Yonsei University</span>
-            </div>
-      </div>
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
 
-      <div class="mobile" id="mobileMenu">
-        <ul class="mobile-list">
-          <li><a href="../research.html">Research</a></li>
-          <li class="mobile-group">
-            <button class="mobile-accordion" type="button" aria-expanded="false" aria-controls="mobilePeople">
-              People <span class="chev" aria-hidden="true">▾</span>
-            </button>
-            <ul class="mobile-sub" id="mobilePeople">
-              <li><a href="../people/pi.html">P.I.</a></li>
-              <li><a href="../people/members.html" aria-current="page">Members</a></li>
-              <li><a href="../people/alumni.html">Alumni</a></li>
-            </ul>
-          </li>
-          <li><a href="../photos.html">Photos</a></li>
-          <li><a href="../vccian.html">VCCian</a></li>
-        </ul>
-      </div>
-    </div>
-  </header>
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(next, INTERVAL);
+    }
 
-  <main id="main">
-    <section class="page-hero">
-      <div class="container">
-        <div class="page-hero-inner">
-          <h1>Members</h1>
-          <p class="lead">Current members of the lab.</p>
-        </div>
-      </div>
-    </section>
+    function stopTimer() { clearInterval(timer); }
 
-    <section>
-      <div class="container">
-        <div class="card content-card">
-          <div class="cards3">
-            <article class="person-card">
-              <div class="avatar"></div>
-              <h3>Name</h3>
-              <p class="muted">Role, Program</p>
-              <p>Keywords, interests</p>
-            </article>
-            <article class="person-card">
-              <div class="avatar"></div>
-              <h3>Name</h3>
-              <p class="muted">Role, Program</p>
-              <p>Keywords, interests</p>
-            </article>
-            <article class="person-card">
-              <div class="avatar"></div>
-              <h3>Name</h3>
-              <p class="muted">Role, Program</p>
-              <p>Keywords, interests</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+    prevBtn.addEventListener('click', () => { prev(); if (!paused) startTimer(); });
+    nextBtn.addEventListener('click', () => { next(); if (!paused) startTimer(); });
 
-  <footer>
-    <div class="container">
-      <div class="copyright">© <span id="year"></span> VCC Lab.</div>
-    </div>
-  </footer>
+    pauseBtn.addEventListener('click', () => {
+      paused = !paused;
+      if (paused) {
+        stopTimer();
+        pauseBtn.textContent = '▶ Resume';
+      } else {
+        startTimer();
+        pauseBtn.textContent = '⏸ Pause';
+      }
+    });
 
-  <script defer src="../assets/js/main.js"></script>
+    startTimer();
+  })();
+  </script>
 </body>
 </html>

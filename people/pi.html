@@ -1,12 +1,87 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>P.I. | VCC Lab</title>
-  <meta name="description" content="Principal Investigator at VCC Lab" />
+  <meta name="description" content="Principal Investigator — VCC Lab, Yonsei University" />
   <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
   <link rel="stylesheet" href="../assets/css/style.css" />
+  <style>
+    /* ── PI profile layout ── */
+    .pi-profile {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+    .pi-photo {
+      flex: 0 0 220px;
+      text-align: center;
+    }
+    .pi-photo .photo-ph {
+      width: 160px;
+      height: 240px;
+      border-radius: 10px;
+      margin: 0 auto 10px;
+    }
+    .pi-photo .pi-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .pi-photo .pi-title {
+      font-size: 0.85rem;
+      color: var(--muted, #888);
+      margin-top: 4px;
+    }
+    .pi-info { flex: 1; min-width: 0; }
+
+    @media (max-width: 600px) {
+      .pi-profile { flex-direction: column; }
+      .pi-photo { flex: unset; width: 100%; }
+    }
+
+    /* ── Section heading accent ── */
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent, #3b6fd4);
+      margin-bottom: 10px;
+    }
+
+    /* ── Bio prose ── */
+    .bio-prose p {
+      margin: 0 0 1em;
+      line-height: 1.75;
+    }
+    .bio-prose p:last-child { margin-bottom: 0; }
+
+    /* ── Collaborator grid ── */
+    .collab-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .collab-chip {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border, #e0e0e0);
+      font-size: 0.875rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .collab-chip:hover {
+      border-color: var(--accent, #3b6fd4);
+      background: var(--accent-light, #eef2fb);
+      color: var(--accent, #3b6fd4);
+    }
+  </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -14,34 +89,35 @@
   <header>
     <div class="container">
       <div class="nav">
-        <a class="brand brand-logo-only" href="./index.html" aria-label="VCC Lab home">
-        <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
+        <a class="brand brand-logo-only" href="../index.html" aria-label="VCC Lab home">
+          <img class="brand-logo" src="../assets/img/vcc-logo.png" alt="VCC Lab logo">
         </a>
 
         <nav class="nav-desktop" aria-label="Primary">
           <ul class="nav-list">
             <li><a href="../research.html">Research</a></li>
-
             <li class="has-dropdown">
               <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
                 People <span class="chev" aria-hidden="true">▾</span>
               </button>
               <ul class="dropdown" role="menu">
-                <li role="none"><a role="menuitem" href="../people/pi.html" aria-current="page">P.I.</a></li>
-                <li role="none"><a role="menuitem" href="../people/members.html">Members</a></li>
-                <li role="none"><a role="menuitem" href="../people/alumni.html">Alumni</a></li>
+                <li role="none"><a role="menuitem" href="./pi.html" aria-current="page">P.I.</a></li>
+                <li role="none"><a role="menuitem" href="./members.html">Members</a></li>
+                <li role="none"><a role="menuitem" href="./alumni.html">Alumni</a></li>
               </ul>
             </li>
-
             <li><a href="../photos.html">Photos</a></li>
             <li><a href="../vccian.html">VCCian</a></li>
           </ul>
         </nav>
 
-            <div class="pill pill-yonsei" title="Affiliation">
-                <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
-                <span class="pill-text">Yonsei University</span>
-            </div>
+        <div class="nav-right">
+          <div class="pill pill-yonsei" title="Affiliation">
+            <img class="pill-logo" src="../assets/img/yonsei-logo.png" alt="Yonsei University">
+            <span class="pill-text">Yonsei University</span>
+          </div>
+          <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+        </div>
       </div>
 
       <div class="mobile" id="mobileMenu">
@@ -52,9 +128,9 @@
               People <span class="chev" aria-hidden="true">▾</span>
             </button>
             <ul class="mobile-sub" id="mobilePeople">
-              <li><a href="../people/pi.html" aria-current="page">P.I.</a></li>
-              <li><a href="../people/members.html">Members</a></li>
-              <li><a href="../people/alumni.html">Alumni</a></li>
+              <li><a href="./pi.html" aria-current="page">P.I.</a></li>
+              <li><a href="./members.html">Members</a></li>
+              <li><a href="./alumni.html">Alumni</a></li>
             </ul>
           </li>
           <li><a href="../photos.html">Photos</a></li>
@@ -65,46 +141,98 @@
   </header>
 
   <main id="main">
-    <section class="page-hero">
+    <section class="page-hero" aria-label="Page header">
       <div class="container">
         <div class="page-hero-inner">
-          <h1>P.I.</h1>
-          <p class="lead">Principal Investigator profile.</p>
+          <h1>Principal Investigator</h1>
+          <p class="lead">Department of Psychology, Yonsei University<br>Graduate Program in Cognitive Science, Yonsei University</p>
         </div>
       </div>
     </section>
 
-    <section>
+    <section aria-label="PI content">
       <div class="container">
-        <div class="card content-card">
-          <div class="profile">
-            <div class="avatar"></div>
-            <div class="profile-body">
-              <h2>Professor Name</h2>
-              <p class="muted">Title, Department, Yonsei University</p>
 
-              <div class="profile-links">
-                <a class="btn" href="#">CV</a>
-                <a class="btn" href="#">Google Scholar</a>
-                <a class="btn" href="#">Email</a>
+        <!-- ── Profile card ── -->
+        <div class="card content-card" style="margin-bottom: 18px;">
+          <div class="pi-profile">
+            <div class="pi-photo">
+              <div class="photo-ph"><img src="../assets/img/scchong.png" style="width:180px;border-radius:10px;"></div>
+            </div>
+            <div class="pi-info">
+              <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:10px;">
+                <span class="pi-name" style="font-size:1.2rem; font-weight:700;">Sang Chul Chong</span>
+                <span style="font-size:0.85rem; color:var(--muted);">email: scchong(at)yonsei(dot)ac(dot)kr</span>
               </div>
-
-              <h3>Research interests</h3>
-              <ul class="bullets">
-                <li>Visual cognition</li>
-                <li>Ensemble perception</li>
-                <li>Attention and decision making</li>
-              </ul>
+              <span class="section-label">Research Interests</span>
+              <p style="line-height:1.75; margin:0;">
+                Research in my lab is concerned with Vision, Cognition, and Consciousness. The long-term goal of our research is to understand how we process and experience a complex and rich visual world. One of the current foci of research is to understand the mechanism of <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and the interaction between <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and focused attention. We think that both <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and focused attention are necessary and complementary strategies for coping with our limited capacity. Another focus is to investigate how ensemble representation is utilized in category learning. We test normal participants as well as patients, using psychophysics, eye tracking, and ERP.
+              </p>
             </div>
           </div>
         </div>
+
+        <!-- ── Bio card ── -->
+        <div class="card content-card" style="margin-bottom: 18px;">
+          <span class="section-label">Bio</span>
+          <div class="bio-prose">
+            <p>
+              I was born and raised in KwangReung, an area famous for its thick woods, in South Korea. As a child I really enjoyed playing outside in the forest and reading books. Since there was no television in my house, I had no choice but to play outside and to read inside.
+            </p>
+            <p>
+              I chose Psychology as my major because I was good at mathematics (up to high school anyway). It was a strange reason, but it led me to experience the joy of studying vision. My interest in visual perception was initially sparked by the passionate lecture of Dr. Chan-Sup Chung, who eventually became my Master's thesis advisor. He said: "Vision is active information-processing, starting from the retina." This struck me hard because I had never before thought about vision as a complex problem to be solved and studied. I investigated the effect of attention on sensitivity and resolution for my Master's thesis.
+            </p>
+            <p>
+              The topic of attention led me to pursue my PhD with <a href="https://en.wikipedia.org/wiki/Anne_Treisman" target="_blank" rel="noreferrer"><strong>Dr. Anne Treisman</strong></a>. I still remember the first question she asked me: "What is attention?" Can you imagine my facial expression when I heard this question (this was before I got over my jet-lag)? During my graduate years, I tried to answer the question how we can rapidly experience the sensation of a high resolution, full-color photograph of our environment. Anne and I proposed that we summarize complex scenes by forming statistical descriptions of sets of similar items. This is achieved through a separate mode of processing that distributes attention to sets of similar items, in contrast to focusing attention on individual items. This topic still comprises <a href="http://vcc.yonsei.ac.kr/research" target="_blank" rel="noreferrer"><strong>one of major research areas</strong></a> in my lab today.
+            </p>
+            <p>
+              I wanted to learn about a new topic in my Post-doc period, which was the reason why I joined <a href="http://www.psy.vanderbilt.edu/faculty/blake/blake.html" target="_blank" rel="noreferrer"><strong>Dr. Randolph Blake</strong></a>'s Lab. Life does not always reflect my ideals. During this period, I investigated the effect of attention on the initial selection of dominance and mean phase duration in binocular rivalry. My special interest in phenomena related to binocular rivalry led me to my current research focus, <a href="http://vcc.yonsei.ac.kr/research" target="_blank" rel="noreferrer"><strong>visual consciousness</strong></a>.
+            </p>
+            <p>
+              I am now very happy to have my own lab and be surrounded by <a href="./members.html"><strong>bright students</strong></a> be it in my lab or the departments (<a href="http://cogsci.yonsei.ac.kr/" target="_blank" rel="noreferrer"><strong>Cognitive Science</strong></a> &amp; <a href="http://psylab.yonsei.ac.kr/" target="_blank" rel="noreferrer"><strong>Psychology</strong></a>). My only complaint is the growing number of titles and number of courses that I am teaching.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── Collaborators card ── -->
+        <div class="card content-card">
+          <span class="section-label">Collaborators</span>
+          <div class="collab-grid">
+            <a class="collab-chip" href="http://www.psy.vanderbilt.edu/faculty/blake/blake.html" target="_blank" rel="noreferrer">Randolph Blake</a>
+            <a class="collab-chip" href="http://www.psy.fau.edu/people/shong6.php" target="_blank" rel="noreferrer">Sang Wook Hong</a>
+            <a class="collab-chip" href="https://sites.google.com/view/vcnlskku/vcnl-lab" target="_blank" rel="noreferrer">Min-Suk Kang</a>
+            <a class="collab-chip" href="http://vcn.korea.ac.kr/" target="_blank" rel="noreferrer">Chai-youn Kim</a>
+            <a class="collab-chip" href="https://centers.ibs.re.kr/html/glia_en/people/people_0203.html" target="_blank" rel="noreferrer">Yee Joon Kim</a>
+            <a class="collab-chip" href="http://www.inahlee.org/" target="_blank" rel="noreferrer">Inah Lee</a>
+            <a class="collab-chip" href="http://wshimlab.com/" target="_blank" rel="noreferrer">Won Mok Shim</a>
+            <a class="collab-chip" href="https://ceed-lab.nd.edu/" target="_blank" rel="noreferrer">K. Lira Yoon</a>
+            <a class="collab-chip" href="https://sites.google.com/view/viscog" target="_blank" rel="noreferrer">Sung Jun Joo</a>
+            <a class="collab-chip" href="https://heeyeon-im.github.io/" target="_blank" rel="noreferrer">Hee Yeon Im</a>
+            <a class="collab-chip" href="https://sites.google.com/view/viscog/people" target="_blank" rel="noreferrer">Sang-Ah Yoo</a>
+          </div>
+        </div>
+
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      <div class="copyright">© <span id="year"></span> VCC Lab.</div>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">VCC Lab</div>
+          <div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
+        </div>
+        <div>
+          <div class="footer-title">Links</div>
+          <div class="footer-links" aria-label="External links">
+            <a href="https://www.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei University</a>
+            <a href="https://psychology.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Psychology</a>
+            <a href="https://graduate.yonsei.ac.kr/" target="_blank" rel="noreferrer">Yonsei Graduate</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
     </div>
   </footer>
 

@@ -8,26 +8,85 @@
   <meta name="theme-color" content="#ffffff" />
   <link rel="icon" href="./assets/favicon/favicon.ico" sizes="any">
   <link rel="stylesheet" href="./assets/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Floating stimuli layer ── */
+    #stimuli-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .stim {
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      will-change: transform, opacity;
+    }
+    .stim.alive { opacity: 1; }
+
+    .news-row {
+      grid-template-columns: 1fr;
+    }
+    /* ── Page z-order ── */
+    /* header는 sticky 자체로 z-index 50 유지, position relative 추가 안 함 */
+    main, footer { position: relative; z-index: 1; }
+
+    /* hero 카드가 header 드롭다운을 가리지 않도록 */
+    .hero { position: relative; z-index: 0; }
+    .hero-split-card { position: relative; z-index: 0; }
+
+    /* ── Hero split layout ── */
+    .hero-split-card {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      padding: 36px 44px;
+    }
+    .hero-split-img {
+      flex: 0 0 500px;
+    }
+    .hero-split-img img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+    }
+    .hero-split-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .hero-split-text .lead {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 700px) {
+      .hero-split-card { flex-direction: column; padding: 24px 20px; gap: 24px; }
+      .hero-split-img { flex: unset; width: 100%; max-width: 320px; margin: 0 auto; }
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Floating stimuli backdrop -->
+  <div id="stimuli-layer" aria-hidden="true"></div>
+
   <a class="skip" href="#main">Skip to content</a>
 
   <header>
     <div class="container">
       <div class="nav">
         <a class="brand brand-logo-only" href="./index.html" aria-label="VCC Lab home">
-        <img class="brand-logo" src="./assets/img/vcc-logo.png" alt="VCC Lab logo">
+          <img class="brand-logo" src="./assets/img/vcc-logo.png" alt="VCC Lab logo">
         </a>
 
         <nav class="nav-desktop" aria-label="Primary">
           <ul class="nav-list">
             <li><a href="./research.html">Research</a></li>
-
             <li class="has-dropdown">
               <button class="nav-link dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
-                People
-                <span class="chev" aria-hidden="true">▾</span>
+                People <span class="chev" aria-hidden="true">▾</span>
               </button>
               <ul class="dropdown" role="menu">
                 <li role="none"><a role="menuitem" href="./people/pi.html">P.I.</a></li>
@@ -35,28 +94,23 @@
                 <li role="none"><a role="menuitem" href="./people/alumni.html">Alumni</a></li>
               </ul>
             </li>
-
             <li><a href="./photos.html">Photos</a></li>
             <li><a href="./vccian.html">VCCian</a></li>
           </ul>
         </nav>
 
         <div class="nav-right">
-            <div class="pill pill-yonsei" title="Affiliation">
-                <img class="pill-logo" src="./assets/img/yonsei-logo.png" alt="Yonsei University">
-                <span class="pill-text">Yonsei University</span>
-            </div>
-
-          <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
-            ☰
-          </button>
+          <div class="pill pill-yonsei" title="Affiliation">
+            <img class="pill-logo" src="./assets/img/yonsei-logo.png" alt="Yonsei University">
+            <span class="pill-text">Yonsei University</span>
+          </div>
+          <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
         </div>
       </div>
 
       <div class="mobile" id="mobileMenu">
         <ul class="mobile-list">
           <li><a href="./research.html">Research</a></li>
-
           <li class="mobile-group">
             <button class="mobile-accordion" type="button" aria-expanded="false" aria-controls="mobilePeople">
               People <span class="chev" aria-hidden="true">▾</span>
@@ -67,7 +121,6 @@
               <li><a href="./people/alumni.html">Alumni</a></li>
             </ul>
           </li>
-
           <li><a href="./photos.html">Photos</a></li>
           <li><a href="./vccian.html">VCCian</a></li>
         </ul>
@@ -78,52 +131,28 @@
   <main id="main">
     <section class="hero" aria-label="Hero">
       <div class="container">
-        <div class="hero-grid hero-grid-home">
-          <div class="card">
-            <div class="hero-main">
-              <h1>Vision, cognition, and conscious experience</h1>
-
-              <p class="lead">
-                VCC Lab studies how humans perceive and interpret complex visual information.
-                We investigate ensemble perception, attention, learning, and decision making using psychophysics, eye tracking, and EEG ERP.
-              </p>
-
-              <div class="cta-row">
-                <a class="btn primary" href="./research.html">Explore research</a>
-                <a class="btn" href="./people/members.html">Meet the team</a>
-                <a class="btn" href="#news">Recent news</a>
-              </div>
-            </div>
+        <div class="card hero-split-card">
+          <!-- Left: representative image -->
+          <div class="hero-split-img">
+            <img src="./assets/img/vcc.png" alt="VCC Lab representative image">
           </div>
 
-          <aside class="card hero-side" aria-label="Highlights">
-            <div class="mini">
-              <h3>Current themes</h3>
-              <p>Ensemble perception, attention, category learning, social perception</p>
-              <div class="meta">
-                <span class="chip">Psychophysics</span>
-                <span class="chip">Eye tracking</span>
-                <span class="chip">EEG ERP</span>
-              </div>
+          <!-- Right: text -->
+          <div class="hero-split-text">
+            <p class="lead">
+              Research in VCC lab is concerned with Vision, Cognition, and Consciousness.
+              The long-term goal of our research is to understand how we process and experience a complex and rich visual world.
+              One of the current foci of research is to understand the mechanism of <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and the interaction between <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and focused attention.
+              We think that both <a href="https://en.wikipedia.org/wiki/Ensemble_coding" target="_blank" rel="noreferrer"><strong>ensemble perception</strong></a> and focused attention are necessary and complementary strategies for coping with our limited capacity.
+              Another focus is to investigate how ensemble representation is utilized in category learning.
+              We test normal participants as well as patients, using psychophysics, eye tracking, and ERP.
+            </p>
+            <div class="cta-row">
+              <a class="btn primary" href="./research.html">Explore research</a>
+              <a class="btn" href="./people/members.html">Meet the team</a>
+              <a class="btn" href="#news">Recent news</a>
             </div>
-
-            <div class="mini">
-              <h3>Lab info</h3>
-              <p>Department of Psychology, Yonsei University</p>
-              <div class="meta">
-                <span class="chip">Seoul</span>
-                <span class="chip">Cognitive Science</span>
-              </div>
-            </div>
-
-            <div class="mini">
-              <h3>Contact</h3>
-              <p>
-                Replace with official lab contact<br />
-                vcc@example.com
-              </p>
-            </div>
-          </aside>
+          </div>
         </div>
       </div>
     </section>
@@ -133,26 +162,24 @@
         <div class="card content-card news-full" id="news">
           <div class="news-head">
             <div>
-              <h2>Recent lab news</h2>
-              <p>Replace these items with your latest updates.</p>
+              <h2>Recent Lab News</h2>
             </div>
           </div>
-
           <ul class="list news-row" aria-label="News list">
             <li class="news-item">
-              <div class="date">2026-03-01</div>
-              <div class="title">Site migration in progress</div>
-              <div class="desc">This page is a static GitHub Pages version to improve stability.</div>
+              <div class="date">March 8th, 2026</div>
+              <div class="title">New Paper!</div>
+              <div class="desc">"The Visual Nature of Social Interaction and Its Impact on Overall Mood Judgments," is accepted for publication in Cognition and Emotion. Congratulations Lijeong!</div>
             </li>
             <li class="news-item">
-              <div class="date">2026-02-10</div>
-              <div class="title">New project kickoff</div>
-              <div class="desc">Short summary goes here.</div>
+              <div class="date">March 5th, 2026</div>
+              <div class="title">New Paper!</div>
+              <div class="desc">Our new paper, "Reappraising Intuitions About Consciousness," is accepted for publication in Frontiers in Psychology. Congratulations Cheongil!</div>
             </li>
             <li class="news-item">
-              <div class="date">2026-01-05</div>
-              <div class="title">Welcome new members</div>
-              <div class="desc">Short summary goes here.</div>
+              <div class="date">November 14th, 2025</div>
+              <div class="title">New Grant!</div>
+              <div class="desc">A new grant to investigate social interaction in the context of people perception and AI has been awarded to our lab by the Yonsei AI Humanity Center.</div>
             </li>
           </ul>
         </div>
@@ -167,7 +194,6 @@
           <div class="footer-title">VCC Lab</div>
           <div class="footer-sub">Vision, Cognition, and Consciousness Lab at Yonsei University</div>
         </div>
-
         <div>
           <div class="footer-title">Links</div>
           <div class="footer-links" aria-label="External links">
@@ -177,13 +203,200 @@
           </div>
         </div>
       </div>
-
-      <div class="copyright">
-        © <span id="year"></span> VCC Lab. All rights reserved.
-      </div>
+      <div class="copyright">© <span id="year"></span> VCC Lab. All rights reserved.</div>
     </div>
   </footer>
 
   <script defer src="./assets/js/main.js"></script>
+
+  <script>
+  (() => {
+    const layer = document.getElementById('stimuli-layer');
+    const W = () => window.innerWidth;
+    const H = () => window.innerHeight;
+
+    const COLORS = ['#e05c5c','#5c9be0','#5cce7a','#e0b95c','#a05ce0','#5ccee0','#e07a5c','#ce5c8a'];
+    const EMOTIONS = ['😊','😮','😢','😠','😲','🙂','😐','😃','😯'];
+
+    /* ── SVG helpers ── */
+    function svgNS(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+
+    function makeLine(angle, color) {
+      const len = 28 + Math.random() * 22;
+      const S = len + 10;
+      const svg = svgNS('svg');
+      svg.setAttribute('width', S); svg.setAttribute('height', S);
+      svg.setAttribute('viewBox', `0 0 ${S} ${S}`);
+      const cx = S/2, cy = S/2;
+      const rad = angle * Math.PI / 180;
+      const dx = Math.cos(rad)*len/2, dy = Math.sin(rad)*len/2;
+      const line = svgNS('line');
+      line.setAttribute('x1', cx-dx); line.setAttribute('y1', cy-dy);
+      line.setAttribute('x2', cx+dx); line.setAttribute('y2', cy+dy);
+      line.setAttribute('stroke', color); line.setAttribute('stroke-width', '3');
+      line.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(line);
+      return svg;
+    }
+
+    function makeCircle(color) {
+      const r = 8 + Math.random() * 10;
+      const S = r*2+6;
+      const svg = svgNS('svg');
+      svg.setAttribute('width', S); svg.setAttribute('height', S);
+      svg.setAttribute('viewBox', `0 0 ${S} ${S}`);
+      const c = svgNS('circle');
+      c.setAttribute('cx', S/2); c.setAttribute('cy', S/2); c.setAttribute('r', r);
+      c.setAttribute('fill', color); c.setAttribute('opacity', '0.8');
+      svg.appendChild(c);
+      return svg;
+    }
+
+    function makeSquare(color) {
+      const s = 14 + Math.random() * 14;
+      const S = s + 8;
+      const svg = svgNS('svg');
+      svg.setAttribute('width', S); svg.setAttribute('height', S);
+      svg.setAttribute('viewBox', `0 0 ${S} ${S}`);
+      const r = svgNS('rect');
+      r.setAttribute('x', 4); r.setAttribute('y', 4);
+      r.setAttribute('width', s); r.setAttribute('height', s);
+      r.setAttribute('fill', 'none'); r.setAttribute('stroke', color);
+      r.setAttribute('stroke-width', '2.5'); r.setAttribute('rx', '3');
+      svg.appendChild(r);
+      return svg;
+    }
+
+    function makeGabor(angle, color) {
+      const size = 44;
+      const uid = 'g' + Math.random().toString(36).slice(2);
+      const svg = svgNS('svg');
+      svg.setAttribute('width', size); svg.setAttribute('height', size);
+      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+      const defs = svgNS('defs');
+      const clip = svgNS('clipPath');
+      clip.setAttribute('id', uid);
+      const cc = svgNS('circle');
+      cc.setAttribute('cx', size/2); cc.setAttribute('cy', size/2); cc.setAttribute('r', size/2-2);
+      clip.appendChild(cc); defs.appendChild(clip); svg.appendChild(defs);
+      const g = svgNS('g');
+      g.setAttribute('clip-path', `url(#${uid})`);
+      const rad = angle * Math.PI / 180;
+      const spacing = 6;
+      for (let i = -size; i < size*2; i += spacing) {
+        const l = svgNS('line');
+        const ox = Math.cos(rad+Math.PI/2)*i, oy = Math.sin(rad+Math.PI/2)*i;
+        const dx = Math.cos(rad)*size*2, dy = Math.sin(rad)*size*2;
+        l.setAttribute('x1', size/2+ox-dx); l.setAttribute('y1', size/2+oy-dy);
+        l.setAttribute('x2', size/2+ox+dx); l.setAttribute('y2', size/2+oy+dy);
+        l.setAttribute('stroke', color); l.setAttribute('stroke-width', '2'); l.setAttribute('opacity','0.7');
+        g.appendChild(l);
+      }
+      const border = svgNS('circle');
+      border.setAttribute('cx', size/2); border.setAttribute('cy', size/2); border.setAttribute('r', size/2-2);
+      border.setAttribute('fill','none'); border.setAttribute('stroke', color);
+      border.setAttribute('stroke-width','1.5'); border.setAttribute('opacity','0.4');
+      g.appendChild(border); svg.appendChild(g);
+      return svg;
+    }
+
+    function makeEmoji() {
+      const span = document.createElement('span');
+      span.textContent = EMOTIONS[Math.floor(Math.random() * EMOTIONS.length)];
+      span.style.cssText = `font-size:${22+Math.random()*14}px;line-height:1;user-select:none;display:block`;
+      return span;
+    }
+
+    function randomChild() {
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const kind = Math.floor(Math.random() * 5);
+      if (kind === 0) return makeLine(Math.random()*180, color);
+      if (kind === 1) return makeCircle(color);
+      if (kind === 2) return makeSquare(color);
+      if (kind === 3) return makeGabor(Math.random()*180, color);
+      return makeEmoji();
+    }
+
+    /* ── Particle lifecycle ── */
+    const MAX_STIMS = 20;
+    let pool = [];
+    let paused = false;
+
+    function spawn() {
+      if (paused || pool.length >= MAX_STIMS) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'stim';
+      wrap.appendChild(randomChild());
+      layer.appendChild(wrap);
+
+      let cx = Math.random() * W();
+      let cy = Math.random() * H();
+      wrap.style.left = cx + 'px';
+      wrap.style.top  = cy + 'px';
+
+      const speed = 0.15 + Math.random() * 0.25;
+      const ang   = Math.random() * Math.PI * 2;
+      const vx    = Math.cos(ang) * speed;
+      const vy    = Math.sin(ang) * speed;
+      const vspin = (Math.random() - 0.5) * 0.04;
+      let rot     = Math.random() * 360;
+      let last    = null;
+      let alive   = true;
+
+      pool.push(wrap);
+      requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('alive')));
+
+      function tick(ts) {
+        if (!alive) return;
+        if (paused) { last = null; requestAnimationFrame(tick); return; }
+        const dt = last ? Math.min(ts - last, 50) : 16;
+        last = ts;
+        cx += vx * dt; cy += vy * dt; rot += vspin * dt;
+        wrap.style.left      = cx + 'px';
+        wrap.style.top       = cy + 'px';
+        wrap.style.transform = `rotate(${rot}deg)`;
+        const margin = 80;
+        if (cx < -margin || cx > W()+margin || cy < -margin || cy > H()+margin) {
+          kill(); return;
+        }
+        requestAnimationFrame(tick);
+      }
+
+      function kill() {
+        alive = false;
+        wrap.classList.remove('alive');
+        setTimeout(() => { wrap.remove(); pool = pool.filter(p => p !== wrap); }, 900);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    /* ── Pause on scroll past hero ── */
+    window.addEventListener('scroll', () => {
+      const heroEl = document.querySelector('.hero');
+      if (!heroEl) return;
+      const rect = heroEl.getBoundingClientRect();
+      const nowPaused = rect.bottom < 0;
+      if (nowPaused !== paused) {
+        paused = nowPaused;
+        if (paused) {
+          pool.forEach(p => p.classList.remove('alive'));
+        }
+      }
+    }, { passive: true });
+
+    /* ── Spawn loop ── */
+    function loop() {
+      if (!paused) spawn();
+      setTimeout(loop, 350 + Math.random() * 450);
+    }
+
+    window.addEventListener('load', () => {
+      for (let i = 0; i < 10; i++) setTimeout(spawn, i * 120);
+      loop();
+    });
+  })();
+  </script>
 </body>
 </html>
