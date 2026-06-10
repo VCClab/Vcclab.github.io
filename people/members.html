@@ -9,6 +9,21 @@
   <link rel="stylesheet" href="../assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <style>
+    .ra-visiting-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .ra-visiting-row > .member-section {
+      flex: 1 1 280px;
+    }
+
+    @media (max-width: 600px) {
+      .ra-visiting-row > .member-section {
+        flex: 1 1 100%;
+      }
+    }
     /* ── Slideshow ── */
     .slideshow-wrap {
       position: relative;
@@ -463,9 +478,9 @@
         </div>
 
       <!-- RA + Visiting Student in same row -->
-      <div style="display: flex; gap: 24px; align-items: flex-start;">
+      <div class="ra-visiting-row">
         <!-- Research Assistant -->
-        <div class="member-section" style="flex: 1 1 280px;">
+        <div class="member-section">
           <div class="member-section-title">research assistant</div>
           <div class="member-grid" style="grid-template-columns: 1fr;">
             <div class="member-card">
@@ -487,7 +502,7 @@
         </div>
 
         <!-- Visiting Students -->
-        <div class="member-section" style="flex: 1 1 280px;">
+        <div class="member-section">
           <div class="member-section-title">visiting student</div>
           <div class="member-grid" style="grid-template-columns: 1fr;">
             <div class="member-card">
