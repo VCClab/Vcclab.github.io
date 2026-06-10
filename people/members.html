@@ -297,7 +297,7 @@
           <button class="slide-btn" id="prevBtn" aria-label="Previous slide">‹</button>
           <div class="slide-dots" id="slideDots"></div>
           <button class="slide-btn" id="nextBtn" aria-label="Next slide">›</button>
-          <button class="pause-btn" id="pauseBtn">⏸ Pause</button>
+          <button class="pause-btn" id="pauseBtn">▶ Resume</button>
         </div>
       </div>
     </section>
@@ -462,6 +462,53 @@
           </div>
         </div>
 
+      <!-- RA + Visiting Student in same row -->
+      <div style="display: flex; gap: 24px; align-items: flex-start;">
+        <!-- Research Assistant -->
+        <div class="member-section" style="flex: 0 0 48%;">
+          <div class="member-section-title">research assistant</div>
+          <div class="member-grid" style="grid-template-columns: 1fr;">
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/minha-kim.jpeg" alt="Min-ha Kim">
+              <div class="member-info">
+                <div class="member-name">Min-ha Kim</div>
+                <span class="member-contact">kimminha0408@gmail.com</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Visual Perception, Ensemble perception</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Drawing, Music</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visiting Students -->
+        <div class="member-section" style="flex: 0 0 48%;">
+          <div class="member-section-title">visiting student</div>
+          <div class="member-grid" style="grid-template-columns: 1fr;">
+            <div class="member-card">
+              <img class="member-avatar-ph" src="../assets/img/members/micah.jpg" alt="Micah Blair">
+              <div class="member-info">
+                <div class="member-name">Micah Blair</div>
+                <span class="member-contact">mblair3@nd.edu</span>
+                <div class="member-field">
+                  <div class="member-field-label">Research</div>
+                  <div class="member-field-value">Cognitive psychology, Forensic psychology</div>
+                </div>
+                <div class="member-field">
+                  <div class="member-field-label">Interests</div>
+                  <div class="member-field-value">Running, Reading and Rewatching TV shows</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
         <!-- Lab Manager -->
         <div class="member-section">
           <div class="member-section-title">Lab Manager</div>
@@ -549,7 +596,7 @@
         });
 
         const slides = Array.from(wrap.querySelectorAll('.slide'));
-        let current = 0, paused = false, timer = null;
+        let current = 0, paused = true, timer = null;
         const INTERVAL = 3500;
 
         sorted.forEach((_, i) => {
@@ -578,8 +625,6 @@
           if (paused) { stopTimer(); pauseBtn.textContent = '▶ Resume'; }
           else        { startTimer(); pauseBtn.textContent = '⏸ Pause'; }
         });
-
-        startTimer();
       })
       .catch(() => {
         document.getElementById('slideshow').innerHTML =
