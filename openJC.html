@@ -10,6 +10,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <style>
     /* ── Schedule table ── */
+    .jc-copy,
+    .jc-doi {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      height: 22px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      border: 1px solid var(--line);
+      color: var(--muted2);
+      background: var(--surface);
+    }
+
+    .jc-copy {
+      margin-left: 6px;
+      cursor: pointer;
+    }
+
+    .jc-doi {
+      margin-left: 6px;
+      text-decoration: none;
+    }
+
+    .jc-copy svg {
+      display: block;
+    }
+    .jc-copy:hover {
+      background: #eef3ff;
+    }
+
+    .jc-doi:hover {
+      background: #eef3ff;
+    }
     .jc-table {
       width: 100%;
       border-collapse: collapse;
@@ -79,6 +116,8 @@
     .jc-comment-row { display: none; }
     .jc-comment-row.open { display: table-row; }
     .jc-comment-cell {
+      white-space: nowrap;
+      text-align: center;
       padding: 0 !important;
       border-bottom: 2px solid var(--line) !important;
     }
@@ -90,7 +129,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      margin-left: 8px;
+      margin-left: 0px;
       font-size: 12px;
       color: var(--muted2);
       background: var(--surface);
@@ -100,14 +139,7 @@
       cursor: pointer;
     }
     .jc-comment-count .bubble { font-size: 11px; }
-    .jc-chevron {
-      font-size: 11px;
-      color: var(--muted2);
-      margin-left: 6px;
-      transition: transform 0.2s;
-      display: inline-block;
-    }
-    .jc-main-row.expanded .jc-chevron { transform: rotate(180deg); }
+
   </style>
 </head>
 <body>
@@ -202,7 +234,7 @@
                   <th>Presenter</th>
                   <th>Paper</th>
                   <th>Mode</th>
-                  <th></th>
+                  <th>Comments</th>
                 </tr>
               </thead>
               <tbody id="jc-tbody">
@@ -230,18 +262,37 @@
   (() => {
     // ── Schedule data: add / edit rows here ──
     const SCHEDULE = [
-      { date: 'Monday, July 6, 2:00 PM', presenter: 'Aaron', paper: '', mode: 'in-person' },
-      { date: 'Monday, June 29, 2:00 PM', presenter: 'P.I.', paper: '', mode: 'online' },
+      { date: 'Monday, July 6, 2:00 PM', presenter: 'Sang Chul', paper: '', mode: 'in-person' },
+      { date: 'Monday, June 29, 2:00 PM', presenter: 'Aaron', paper: 'File, D., Bőthe, B., File, B., Griffiths, M. D., & Demetrovics, Z. (2025). A proof of concept study to assess the imbalance of self-reported wanting and liking as a predictor of problematic addictive behaviors. International Journal of Mental Health and Addiction, 23(3), 2218-2236.', doi: 'https://link.springer.com/article/10.1007/s11469-023-01226-4', mode: 'online' },
       { date: 'Monday, June 22, 2:00 PM', presenter: 'Daun', paper: 'Research Progress Presentation', mode: 'in-person' },
       { date: 'Monday, June 15, 1:30 PM', presenter: 'VCCians', paper: 'VSS 2026 Lab Sharing Session', mode: 'online' },
       { date: 'Monday, June 8, 1:30 PM', presenter: 'VCCians', paper: 'PhD Dissertation Final Defense Practice - – Widang Hall Room 501', mode: 'in-person' },
-      { date: 'Monday, May 18, 1:30 PM', presenter: 'Seri', paper: 'Meyers, C., Kim, J. & Kawakami, K. Diversity perceptions and neighborhood preferences for visual representations of mixed racial groups. Sci Rep 14, 24631 (2024).', mode: 'in-person' },
-      { date: 'Monday, May 11, 1:30 PM', presenter: 'Junghyun', paper: 'Balaban, H., & Ullman, T. D. (2025). The capacity limits of moving objects in the imagination. Nature Communications, 16(1), 5899.', mode: 'online' },
+      { date: 'Monday, May 18, 1:30 PM', presenter: 'Seri', paper: 'Meyers, C., Kim, J. & Kawakami, K. Diversity perceptions and neighborhood preferences for visual representations of mixed racial groups. Sci Rep 14, 24631 (2024).', doi: 'https://www.nature.com/articles/s41598-024-76599-0.pdf', mode: 'in-person' },
+      { date: 'Monday, May 11, 1:30 PM', presenter: 'Junghyun', paper: 'Balaban, H., & Ullman, T. D. (2025). The capacity limits of moving objects in the imagination. Nature Communications, 16(1), 5899.', doi: 'https://www.nature.com/articles/s41467-025-61021-8.pdf', mode: 'online' },
       { date: 'Thursday, April 30, 12:00 PM', presenter: 'VCCians', paper: 'Poster Presentation Practice', mode: 'in-person' },
-      { date: 'Monday, April 20, 1:30 PM', presenter: 'Youngzoo', paper: 'Zhang, S., Zhan, B., Wang, L., & Jiang, Y. (2025). Dyadic learning shapes gaze-mediated social attentional orienting. Cognition, 265', mode: 'online' },
+      { date: 'Monday, April 20, 1:30 PM', presenter: 'Youngzoo', paper: 'Zhang, S., Zhan, B., Wang, L., & Jiang, Y. (2025). Dyadic learning shapes gaze-mediated social attentional orienting. Cognition, 265', doi: 'https://www.sciencedirect.com/science/article/pii/S0010027725002203', mode: 'online' },
       { date: 'Monday, April 13, 1:30 PM', presenter: 'VCCians', paper: 'PhD Dissertation Defense Practice – Widang Hall Room 501', mode: 'in-person' },
-      { date: 'Monday, March 30, 1:30 PM', presenter: 'Lijeong', paper: 'Masroujah, L. S., Wilcke, S., Jeffery, L., Mostert, B., Tiddeman, B., & Sutherland, C. A. (2026). Testing stimulus generalisation as a mechanism for impression formation. Cognition, 270, 106414.', mode: 'online' },
+      { date: 'Monday, March 30, 1:30 PM', presenter: 'Lijeong', paper: 'Masroujah, L. S., Wilcke, S., Jeffery, L., Mostert, B., Tiddeman, B., & Sutherland, C. A. (2026). Testing stimulus generalisation as a mechanism for impression formation. Cognition, 270, 106414.', doi: 'https://www.sciencedirect.com/science/article/pii/S0010027725003555', mode: 'online' },
     ];
+
+    // Copy icon used in citation copy buttons
+    const COPY_ICON = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+        <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+    `;
+
+    // Escape text safely for HTML attributes
+    function escapeAttr(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
 
     // giscus config — update repo/repo-id/category/category-id as needed
     const GISCUS = {
@@ -250,7 +301,7 @@
       category:    'Q&A',
       categoryId:  'DIC_kwDORdCI284C3pS8',
       theme:       'light',
-      lang:        'ko',
+      lang:        'en',
     };
 
     const tbody = document.getElementById('jc-tbody');
@@ -269,16 +320,27 @@
       tr.innerHTML = `
         <td class="jc-date">${row.date}</td>
         <td class="jc-presenter">${row.presenter}</td>
-        <td class="jc-paper">${row.paper}</td>
+        <td class="jc-paper">
+          ${row.paper}
+          ${row.doi ? `
+            <button class="jc-copy"
+                    type="button"
+                    data-paper="${escapeAttr(row.paper)}"
+                    title="Copy citation"
+                    aria-label="Copy citation">
+              ${COPY_ICON}
+            </button>
+            <a class="jc-doi" href="${row.doi}" target="_blank" rel="noopener">DOI ↗</a>
+          ` : ''}
+        </td>
         <td>
           <span class="jc-mode ${row.mode}">${modeLabel}</span>
+        </td>
+        <td class="jc-comments-cell">
           <span class="jc-comment-count" data-term="${term}">
             <span class="bubble">💬</span>
             <span class="count-num" id="count-${term}">—</span>
           </span>
-        </td>
-        <td style="white-space:nowrap; color:var(--muted2); font-size:12px;">
-          Comments <span class="jc-chevron">▾</span>
         </td>`;
       tbody.appendChild(tr);
 
@@ -308,12 +370,52 @@
           loadGiscus(i, term);
         }
       });
+
+      // Prevent DOI click from toggling the comment row
+      const doiBtn = tr.querySelector('.jc-doi');
+      if (doiBtn) {
+        doiBtn.addEventListener('click', e => e.stopPropagation());
+      }
+
+      // ── Copy citation button: only exists when row.doi exists ──
+      const copyBtn = tr.querySelector('.jc-copy');
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+
+          const btn = e.currentTarget;
+          const text = btn.dataset.paper;
+
+          try {
+            await navigator.clipboard.writeText(text);
+
+            btn.innerHTML = '✓';
+            btn.setAttribute('title', 'Copied!');
+
+            setTimeout(() => {
+              btn.innerHTML = COPY_ICON;
+              btn.setAttribute('title', 'Copy citation');
+            }, 1200);
+          } catch (err) {
+            console.error('Copy failed:', err);
+          }
+        });
+      }
     });
 
     // ── Load giscus iframe into a specific comment row ──
     function loadGiscus(idx, term) {
       const inner = document.getElementById(`comment-inner-${idx}`);
-      if (inner.querySelector('script[data-giscus-loaded]')) return; // already loaded
+      if (!inner) return;
+
+      // giscus can behave unpredictably when multiple iframes remain active.
+      // Keep only the currently opened row's giscus instance.
+      document.querySelectorAll('.jc-comment-inner').forEach(el => {
+        if (el !== inner) el.innerHTML = '<!-- giscus loads here on first open -->';
+      });
+
+      inner.innerHTML = '';
 
       const script = document.createElement('script');
       script.src = 'https://giscus.app/client.js';
@@ -325,12 +427,11 @@
       script.setAttribute('data-term',             term);
       script.setAttribute('data-strict',           '1');
       script.setAttribute('data-reactions-enabled','1');
-      script.setAttribute('data-emit-metadata',    '1'); // emit count
+      script.setAttribute('data-emit-metadata',    '1');
       script.setAttribute('data-input-position',   'top');
       script.setAttribute('data-theme',            GISCUS.theme);
       script.setAttribute('data-lang',             GISCUS.lang);
       script.setAttribute('crossorigin',           'anonymous');
-      script.setAttribute('data-giscus-loaded',    'true');
       script.async = true;
       inner.appendChild(script);
     }
@@ -340,16 +441,16 @@
       if (e.origin !== 'https://giscus.app') return;
       const data = e.data?.giscus?.discussion;
       if (!data) return;
-      const term = e.data?.giscus?.discussion?.url
-        ?.split('=').pop(); // fallback
       // giscus emits totalCommentCount + totalReplyCount
       const count = (data.totalCommentCount ?? 0) + (data.totalReplyCount ?? 0);
-      // find which term this belongs to by matching open row
-      document.querySelectorAll('.jc-main-row.expanded').forEach(tr => {
-        const t = tr.dataset.term;
+
+      // Update the currently opened row's visible count.
+      const activeRow = document.querySelector('.jc-main-row.expanded');
+      if (activeRow) {
+        const t = activeRow.dataset.term;
         const el = document.getElementById(`count-${t}`);
         if (el) el.textContent = count;
-      });
+      }
     });
   })();
   </script></body></html>
