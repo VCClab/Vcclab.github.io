@@ -262,6 +262,7 @@
   (() => {
     // ── Schedule data: add / edit rows here ──
     const SCHEDULE = [
+      { date: 'Monday, July 20, 2:00 PM', presenter: 'Cheongil', paper: 'Haskins, A. J., Packard, K. O., & Robertson, C. E. (2026). Conceptual priorities shape individual gaze patterns during naturalistic visual attention. Proceedings of the National Academy of Sciences, 123(24), e2604369123.', doi: 'https://www.pnas.org/doi/abs/10.1073/pnas.2604369123', mode: 'in-person' },
       { date: 'Monday, July 13, 2:00 PM', presenter: 'Sion', paper: 'Özden, M., & Yıldırım, E. (2026). How emotional affinity modulates eye movements in concealed information detection. Current Psychology, 45(12), 1123.', doi: 'https://link.springer.com/article/10.1007/s12144-026-09684-4', mode: 'online' },
       { date: 'Monday, July 6, 2:00 PM', presenter: 'Sang Chul', paper: 'Cowen, A. S., Keltner, D., Schroff, F., Jou, B., Adam, H., & Prasad, G. (2021). Sixteen facial expressions occur in similar contexts worldwide. Nature, 589(7841), 251-257.', doi: 'https://www.nature.com/articles/s41586-020-3037-7', mode: 'in-person' },
       { date: 'Monday, June 29, 2:00 PM', presenter: 'Aaron', paper: 'File, D., Bőthe, B., File, B., Griffiths, M. D., & Demetrovics, Z. (2025). A proof of concept study to assess the imbalance of self-reported wanting and liking as a predictor of problematic addictive behaviors. International Journal of Mental Health and Addiction, 23(3), 2218-2236.', doi: 'https://link.springer.com/article/10.1007/s11469-023-01226-4', mode: 'online' },
@@ -306,8 +307,57 @@
     };
 
     const tbody = document.getElementById('jc-tbody');
-    // comment count cache: date → count (fetched lazily via giscus postMessage)
+    // comment count cache: term → count
     const countCache = {};
+
+    // ── Pre-fetch comment counts without opening giscus ──
+    // giscus.app/api/discussions is the (unofficial but public) endpoint giscus itself
+    // uses to look up a discussion's metadata. It isn't CORS-enabled for arbitrary
+    // origins, so we route the request through a public CORS proxy. Swap
+    // CORS_PROXY for a small serverless proxy you control if you want this to be
+    // more reliable long-term (the public proxy can be rate-limited or flaky).
+    const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
+    async function fetchCommentCount(term) {
+      const apiUrl = 'https://giscus.app/api/discussions?' + new URLSearchParams({
+        repo: GISCUS.repo,
+        term: term,
+        category: GISCUS.category,
+        categoryId: GISCUS.categoryId,
+        strict: '1',
+      });
+
+      const res = await fetch(CORS_PROXY + encodeURIComponent(apiUrl));
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      // No discussion exists yet for this term (no one has commented) →
+      // treat as 0 rather than throwing.
+      if (!data || !data.discussion) return 0;
+
+      const c = data.discussion;
+      return (c.totalCommentCount ?? 0) + (c.totalReplyCount ?? 0);
+    }
+
+    function renderCount(term, count) {
+      countCache[term] = count;
+      const el = document.getElementById(`count-${term}`);
+      if (el) el.textContent = count;
+    }
+
+    // Kick off all lookups in parallel once the rows exist (see bottom of forEach).
+    function prefetchAllCounts() {
+      SCHEDULE.forEach(row => {
+        const term = `jc-${row.date}`;
+        fetchCommentCount(term)
+          .then(count => renderCount(term, count))
+          .catch(err => {
+            // Fail silently per-row (e.g. proxy hiccup) — leave the "—" placeholder
+            // rather than showing a wrong or scary value.
+            console.warn(`Comment count fetch failed for "${term}":`, err);
+          });
+      });
+    }
 
     SCHEDULE.forEach((row, i) => {
       const modeLabel = row.mode === 'in-person' ? 'In person' : 'Online';
@@ -405,6 +455,9 @@
       }
     });
 
+    // All rows are now in the DOM — fetch every discussion's comment count.
+    prefetchAllCounts();
+
     // ── Load giscus iframe into a specific comment row ──
     function loadGiscus(idx, term) {
       const inner = document.getElementById(`comment-inner-${idx}`);
@@ -442,15 +495,11 @@
       if (e.origin !== 'https://giscus.app') return;
       const data = e.data?.giscus?.discussion;
       if (!data) return;
-      // giscus emits totalCommentCount + totalReplyCount
-      const count = (data.totalCommentCount ?? 0) + (data.totalReplyCount ?? 0);
 
-      // Update the currently opened row's visible count.
+      const count = (data.totalCommentCount ?? 0) + (data.totalReplyCount ?? 0);
       const activeRow = document.querySelector('.jc-main-row.expanded');
       if (activeRow) {
-        const t = activeRow.dataset.term;
-        const el = document.getElementById(`count-${t}`);
-        if (el) el.textContent = count;
+        renderCount(activeRow.dataset.term, count);
       }
     });
   })();
