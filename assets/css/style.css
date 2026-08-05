@@ -577,12 +577,12 @@ footer{
 }
 .photo-tile img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
 }
 .photo-ph{
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   background:
     linear-gradient(135deg, var(--blue-weak), transparent 55%),
     linear-gradient(225deg, var(--green-weak), transparent 55%),
