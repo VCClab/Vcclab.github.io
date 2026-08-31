@@ -564,7 +564,7 @@
           const div = document.createElement('div');
           div.className = 'slide' + (i === 0 ? ' active' : '');
           div.innerHTML = `
-            <img src="../assets/img/vccians/${year}.png" alt="VCCians ${year}">
+            <img src="../assets/img/vccians/${year}.jpg" alt="VCCians ${year}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1'; this.src='../assets/img/vccians/${year}.png';}">
             <div class="slide-caption">VCCians ${year}</div>`;
           div.querySelector('img').addEventListener('click', e => {
             e.stopPropagation();

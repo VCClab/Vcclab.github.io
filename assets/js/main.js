@@ -47,3 +47,29 @@
     });
   }
 })();
+
+// Click-to-zoom lightbox for images with class "lightbox-img"
+(function initLightbox(){
+  const overlay = document.createElement("div");
+  overlay.className = "lightbox-overlay";
+  const img = document.createElement("img");
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  function open(src, alt){
+    img.src = src;
+    img.alt = alt || "";
+    overlay.classList.add("active");
+  }
+  function close(){
+    overlay.classList.remove("active");
+    img.src = "";
+  }
+
+  overlay.addEventListener("click", close);
+  document.addEventListener("keydown", (e) => { if(e.key === "Escape") close(); });
+
+  document.querySelectorAll(".lightbox-img").forEach(el => {
+    el.addEventListener("click", () => open(el.src, el.alt));
+  });
+})();

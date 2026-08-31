@@ -8,7 +8,84 @@
   <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
   <link rel="stylesheet" href="./assets/css/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
-  
+  <style>
+    /* ── Gallery cards (multi-image photo-tiles) ── */
+    .photo-tile.gallery-tile { position: relative; cursor: zoom-in; }
+    .photo-tile.gallery-tile .gallery-count {
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      backdrop-filter: blur(3px);
+      pointer-events: none;
+    }
+
+    /* ── Gallery lightbox ── */
+    .gallery-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    .gallery-lightbox.open { display: flex; }
+    .gallery-lightbox img {
+      max-width: 85vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .gallery-lightbox-close {
+      position: fixed;
+      top: 20px; right: 24px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      opacity: 0.8;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .gallery-lightbox-close:hover { opacity: 1; }
+    .gallery-nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .gallery-nav-btn:hover { background: rgba(255,255,255,0.3); }
+    .gallery-prev { left: 24px; }
+    .gallery-next { right: 24px; }
+    .gallery-counter {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 13px;
+      background: rgba(0,0,0,0.5);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+  </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -78,21 +155,39 @@
       <div class="container">
         <div class="card content-card">
           <div class="photo-grid">
+
+              <figure class="photo-tile gallery-tile"
+                      data-images='["./assets/img/photos/2608_graduate(1).jpg","./assets/img/photos/2608_graduate(3).jpg", "./assets/img/photos/2608_graduate(4).jpg", "./assets/img/photos/2608_graduate(2).jpg"]'>
+                <figcaption>2026.08.28 Memory for the graduation ceremony</figcaption>
+                <img src="./assets/img/photos/2608_graduate(2).jpg" style="width:100%;height:100%;object-fit:cover;">
+              </figure>
+
+              <figure class="photo-tile gallery-tile"
+                      data-images='["./assets/img/photos/2607_LabConference(1).jpg","./assets/img/photos/2607_LabConference(2).jpg"]'>
+                <figcaption>2026.07.30 VCC Lab Conference</figcaption>
+                <img src="./assets/img/photos/2607_LabConference.jpg" style="width:100%;height:100%;object-fit:cover;">
+              </figure>
+
+              <figure class="photo-tile gallery-tile"
+                      data-images='["./assets/img/photos/2606_Homecoming(1).jpg","./assets/img/photos/2606_Homecoming(2).jpg"]'>
+                <figcaption>2026.06.05 The First VCC Homecoming</figcaption>
+                <img src="./assets/img/photos/2606_Homecoming(1).jpg" style="width:100%;height:100%;object-fit:cover;">
+              </figure>
+ 
+
             <figure class="photo-tile">
-              <figcaption>2026.07.30 VCC Lab Conference</figcaption>
-              <img src="./assets/img/photos/2607_LabConference.jpg" style="width:100%;height:100%;object-fit:cover;">
+              <figcaption>2026.03.13 26-1 Back-to-school party</figcaption>
+              <img src="./assets/img/photos/2603_welcome.jpg" style="width:100%;height:100%;object-fit:cover;" class="lightbox-img">
             </figure>
-            <figure class="photo-tile">
-              <figcaption>2026.06.05 The First VCC Homecoming</figcaption>
-              <img src="./assets/img/photos/2606_Homecoming.jpg" style="width:100%;height:100%;object-fit:cover;">
-            </figure>
+
             <figure class="photo-tile">
               <figcaption>2025.08.29 Memory for the graduation ceremony</figcaption>
-              <img src="./assets/img/photos/2508-graduate.jpg" style="width:100%;height:100%;object-fit:cover;">
+              <img src="./assets/img/photos/2508-graduate.jpg" style="width:100%;height:100%;object-fit:cover;" class="lightbox-img">
             </figure>
+
             <figure class="photo-tile">
               <figcaption>2025.02.26 Memory for the graduation ceremony</figcaption>
-              <img src="./assets/img/photos/2502_graduate.jpg" style="width:100%;height:100%;object-fit:cover;">
+              <img src="./assets/img/photos/2502_graduate.jpg" style="width:100%;height:100%;object-fit:cover;" class="lightbox-img">
             </figure>
 
           </div>
@@ -107,6 +202,78 @@
     </div>
   </footer>
 
+  <!-- Gallery lightbox (for multi-image cards) -->
+  <div class="gallery-lightbox" id="galleryLightbox">
+    <button class="gallery-lightbox-close" id="galleryClose" aria-label="Close">✕</button>
+    <button class="gallery-nav-btn gallery-prev" id="galleryPrev" aria-label="Previous photo">‹</button>
+    <img id="galleryImg" src="" alt="">
+    <button class="gallery-nav-btn gallery-next" id="galleryNext" aria-label="Next photo">›</button>
+    <div class="gallery-counter" id="galleryCounter"></div>
+  </div>
+
   <script defer src="./assets/js/main.js"></script>
+  <script>
+    (function () {
+      const lb       = document.getElementById('galleryLightbox');
+      const lbImg    = document.getElementById('galleryImg');
+      const counter  = document.getElementById('galleryCounter');
+      const closeBtn = document.getElementById('galleryClose');
+      const prevBtn  = document.getElementById('galleryPrev');
+      const nextBtn  = document.getElementById('galleryNext');
+
+      let images = [];
+      let index  = 0;
+
+      function show(i) {
+        index = (i + images.length) % images.length;
+        lbImg.src = images[index];
+        const multi = images.length > 1;
+        counter.textContent   = multi ? `${index + 1} / ${images.length}` : '';
+        counter.style.display = multi ? 'block' : 'none';
+        prevBtn.style.display = multi ? 'flex' : 'none';
+        nextBtn.style.display = multi ? 'flex' : 'none';
+      }
+
+      function open(imgs, startIndex) {
+        images = imgs;
+        show(startIndex);
+        lb.classList.add('open');
+      }
+
+      function close() { lb.classList.remove('open'); }
+
+      closeBtn.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      prevBtn.addEventListener('click', () => show(index - 1));
+      nextBtn.addEventListener('click', () => show(index + 1));
+      document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape')    close();
+        if (e.key === 'ArrowLeft') show(index - 1);
+        if (e.key === 'ArrowRight') show(index + 1);
+      });
+
+      document.querySelectorAll('.photo-tile.gallery-tile').forEach(tile => {
+        let imgs;
+        try { imgs = JSON.parse(tile.dataset.images); } catch (e) { imgs = null; }
+        if (!imgs || !imgs.length) return;
+
+        if (imgs.length > 1) {
+          const badge = document.createElement('span');
+          badge.className = 'gallery-count';
+          badge.textContent = `+${imgs.length - 1}`;
+          tile.appendChild(badge);
+        }
+
+        const mainImg = tile.querySelector('img');
+        if (mainImg) {
+          mainImg.addEventListener('click', e => {
+            e.stopPropagation();
+            open(imgs, 0);
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

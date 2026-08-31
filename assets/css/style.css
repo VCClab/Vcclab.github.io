@@ -672,3 +672,23 @@ footer{
 @media (max-width: 720px){
   .brand-logo{ height: 32px; }
 }
+
+.lightbox-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 24px;
+  cursor: zoom-out;
+}
+.lightbox-overlay.active{ display: flex; }
+.lightbox-overlay img{
+  max-width: 92vw;
+  max-height: 92vh;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.lightbox-img{ cursor: zoom-in; }
