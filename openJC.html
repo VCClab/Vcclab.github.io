@@ -140,6 +140,48 @@
     }
     .jc-comment-count .bubble { font-size: 11px; }
 
+    /* ── Pagination ── */
+    .jc-pager {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .jc-page-btn {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--muted2);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .jc-page-btn:hover:not(:disabled):not(.active) { background: #eef3ff; }
+    .jc-page-btn.active {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #fff;
+    }
+    .jc-page-btn:disabled { opacity: .35; cursor: default; }
+    .jc-page-ellipsis {
+      padding: 0 2px;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+    .jc-page-info {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
   </style>
 </head>
 <body>
@@ -256,8 +298,9 @@
                 <!-- rows injected by JS -->
               </tbody>
             </table>
-            
-          </div>
+
+            <div class="jc-pager" id="jc-pager"></div>
+            <div class="jc-page-info" id="jc-page-info"></div>
         </div>
 
       </div>
@@ -278,6 +321,7 @@
   (() => {
     // ── Schedule data: add / edit rows here ──
     const SCHEDULE = [
+      { date: 'Monday, September 7, 2:00 PM', presenter: 'Youngzoo', paper: 'Colombatto, C., & Scholl, B. J. (2025). Attending to attention: Reverse correlation reveals subtle cues to attentiveness in others’ faces. Psychonomic Bulletin & Review, 32(6), 3176-3184.', doi: 'https://doi.org/10.3758/s13423-025-02739-w', mode: 'in-person' },
       { date: 'Monday, August 31, 2:00 PM', presenter: 'Lijeong', paper: 'Gerlofs, D. J., & Kingstone, A. (2026). Metacognition and the dual function of social gaze. Journal of Experimental Psychology: General, 155(8), 1967.', doi: 'https://doi.org/10.1037/xge0001967', mode: 'online' },
       { date: 'Monday, August 10, 2:00 PM', presenter: 'Jeunghwan', paper: 'Lukashevich, A., Utochkin, I., Hansmann-Roth, S., & Sigurdardottir, H. M. (2026). Orientation ensemble perception is highly dependent on spatial attention. International Journal of Psychophysiology, 113439.', doi: 'https://www.sciencedirect.com/science/article/abs/pii/S0167876026001224?via%3Dihub', mode: 'in-person' },
       { date: 'Monday, July 20, 2:00 PM', presenter: 'Cheongil', paper: 'Haskins, A. J., Packard, K. O., & Robertson, C. E. (2026). Conceptual priorities shape individual gaze patterns during naturalistic visual attention. Proceedings of the National Academy of Sciences, 123(24), e2604369123.', doi: 'https://www.pnas.org/doi/abs/10.1073/pnas.2604369123', mode: 'in-person' },
@@ -324,7 +368,17 @@
       lang:        'en',
     };
 
-    const tbody = document.getElementById('jc-tbody');
+    // ── Pagination config ──
+    const PER_PAGE = 10;   // 한 페이지에 보여줄 세션 수
+
+    const tbody      = document.getElementById('jc-tbody');
+    const pagerEl    = document.getElementById('jc-pager');
+    const pageInfoEl = document.getElementById('jc-page-info');
+    const tableEl    = document.getElementById('jc-table');
+
+    const totalPages = Math.max(1, Math.ceil(SCHEDULE.length / PER_PAGE));
+    let currentPage  = 1;
+
     // comment count cache: term → count
     const countCache = {};
 
@@ -363,21 +417,25 @@
       if (el) el.textContent = count;
     }
 
-    // Kick off all lookups in parallel once the rows exist (see bottom of forEach).
-    function prefetchAllCounts() {
-      SCHEDULE.forEach(row => {
-        const term = `jc-${row.date}`;
-        fetchCommentCount(term)
-          .then(count => renderCount(term, count))
-          .catch(err => {
-            // Fail silently per-row (e.g. proxy hiccup) — leave the "—" placeholder
-            // rather than showing a wrong or scary value.
-            console.warn(`Comment count fetch failed for "${term}":`, err);
-          });
-      });
+    // Only fetch what this page needs; reuse the cache when revisiting a page.
+    function ensureCount(term) {
+      if (countCache[term] !== undefined) {
+        renderCount(term, countCache[term]);
+        return;
+      }
+      fetchCommentCount(term)
+        .then(count => renderCount(term, count))
+        .catch(err => {
+          // Fail silently per-row (e.g. proxy hiccup) — leave the "—" placeholder
+          // rather than showing a wrong or scary value.
+          console.warn(`Comment count fetch failed for "${term}":`, err);
+        });
     }
 
-    SCHEDULE.forEach((row, i) => {
+    // ── Build one main row + its (hidden) comment row ──
+    // `i` is the index within SCHEDULE, not within the page, so giscus element
+    // ids stay unique across pages.
+    function buildRow(row, i) {
       const modeLabel = row.mode === 'in-person' ? 'In person' : 'Online';
       const term = `jc-${row.date}`; // unique discussion term per session
 
@@ -471,10 +529,80 @@
           }
         });
       }
-    });
+    }
 
-    // All rows are now in the DOM — fetch every discussion's comment count.
-    prefetchAllCounts();
+    // ── Which page numbers to show (with ellipsis once the list gets long) ──
+    function pageItems(cur, total) {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const out = [1];
+      if (cur > 3) out.push('…');
+      for (let i = Math.max(2, cur - 1); i <= Math.min(total - 1, cur + 1); i++) out.push(i);
+      if (cur < total - 2) out.push('…');
+      out.push(total);
+      return out;
+    }
+
+    function renderPager() {
+      pagerEl.innerHTML = '';
+      if (totalPages <= 1) {
+        pageInfoEl.textContent = '';
+        return;
+      }
+
+      const mkBtn = (label, page, opts = {}) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'jc-page-btn' + (opts.active ? ' active' : '');
+        b.textContent = label;
+        if (opts.disabled) b.disabled = true;
+        if (opts.active) b.setAttribute('aria-current', 'page');
+        if (!opts.disabled && !opts.active) {
+          b.addEventListener('click', () => renderPage(page, true));
+        }
+        return b;
+      };
+
+      pagerEl.appendChild(mkBtn('‹', currentPage - 1, { disabled: currentPage === 1 }));
+
+      pageItems(currentPage, totalPages).forEach(item => {
+        if (item === '…') {
+          const s = document.createElement('span');
+          s.className = 'jc-page-ellipsis';
+          s.textContent = '…';
+          pagerEl.appendChild(s);
+        } else {
+          pagerEl.appendChild(mkBtn(String(item), item, { active: item === currentPage }));
+        }
+      });
+
+      pagerEl.appendChild(mkBtn('›', currentPage + 1, { disabled: currentPage === totalPages }));
+
+      const start = (currentPage - 1) * PER_PAGE + 1;
+      const end = Math.min(currentPage * PER_PAGE, SCHEDULE.length);
+      pageInfoEl.textContent = `${start}–${end} of ${SCHEDULE.length} sessions`;
+    }
+
+    // ── Render one page of the schedule ──
+    function renderPage(page, scroll = false) {
+      currentPage = Math.min(Math.max(1, page), totalPages);
+      tbody.innerHTML = '';
+
+      const start = (currentPage - 1) * PER_PAGE;
+      const rows = SCHEDULE.slice(start, start + PER_PAGE);
+      rows.forEach((row, j) => buildRow(row, start + j));
+
+      renderPager();
+
+      // Rows for this page are in the DOM — fetch their comment counts.
+      rows.forEach(row => ensureCount(`jc-${row.date}`));
+
+      if (scroll) {
+        const y = tableEl.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    renderPage(1);
 
     // ── Load giscus iframe into a specific comment row ──
     function loadGiscus(idx, term) {
