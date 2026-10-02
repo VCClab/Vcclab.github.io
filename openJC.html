@@ -277,13 +277,13 @@
         <!-- Schedule table -->
         <div class="card content-card">
           <h2>Schedule</h2>
-          <div style="overflow-x:auto; margin-top:12px;">
+          <!--<div style="overflow-x:auto; margin-top:12px;">
              <div class="card content-card" style="background:#fff4e5; border-color:#f0c98a; margin:14px 0 0; text-align:center;">
               <p style="margin:0; color:#8a5a00; font-weight:600;">
                 Note: There will be no Journal Club sessions for the next three weeks (Sept. 21, Sept. 28, and Oct. 5).
               </p>
             </div>
-          </div>
+          </div>-->
             <table class="jc-table" id="jc-table">
               <thead>
                 <tr>
@@ -321,6 +321,7 @@
   (() => {
     // ── Schedule data: add / edit rows here ──
     const SCHEDULE = [
+      { date: 'Monday, October 12, 2:00 PM', presenter: 'Daun', paper: 'De, A., Liu, S. F., Monaragala, K., Shoura, M., Cunningham, W. A., & Nestor, A. (2026). The self as an image: Appearance and belief in visual representations of one&apos;s own face. Cognition, 275, 106639.', doi: 'https://doi.org/10.1016/j.cognition.2026.106639', mode: 'in-person' },
       { date: 'Monday, September 14, 2:00 PM', presenter: 'Junghyun', paper: 'Research Progress Presentation', mode: 'in-person' },
       { date: 'Monday, September 7, 2:00 PM', presenter: 'Youngzoo', paper: 'Colombatto, C., & Scholl, B. J. (2025). Attending to attention: Reverse correlation reveals subtle cues to attentiveness in others’ faces. Psychonomic Bulletin & Review, 32(6), 3176-3184.', doi: 'https://doi.org/10.3758/s13423-025-02739-w', mode: 'in-person' },
       { date: 'Monday, August 31, 2:00 PM', presenter: 'Lijeong', paper: 'Gerlofs, D. J., & Kingstone, A. (2026). Metacognition and the dual function of social gaze. Journal of Experimental Psychology: General, 155(8), 1967.', doi: 'https://doi.org/10.1037/xge0001967', mode: 'online' },
